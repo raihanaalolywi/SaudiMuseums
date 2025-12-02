@@ -4,7 +4,14 @@ from django.contrib import messages
 from .models import Contact
 import os
 
+
 def contact_us(request):
+
+    #  منع غير المسجلين دخول من الإرسال
+    if request.method == "POST" and not request.user.is_authenticated:
+        messages.error(request, "يجب تسجيل الدخول قبل إرسال الرسالة.")
+        return redirect("account:sign_in")
+
     if request.method == "POST":
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")

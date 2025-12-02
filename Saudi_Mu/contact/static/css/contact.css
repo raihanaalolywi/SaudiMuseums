@@ -1,20 +1,15 @@
-:root {
-    --bg: #F2E9D8;    
-    --card: #4A0E2E;   
-    --hover: #68163D;  
-    --gold: #C6A667;   
-    --text: #2c2c2c;
-}
+/* ==========================
+    CONTACT PAGE
+========================== */
 
-/* ========= Page container ========= */
 .contact-page {
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Poppins", sans-serif;
-    padding: 50px 10%;
+    padding: 40px;
+    background:  #f4f1e9 !important;
+    direction: ltr;            
+    text-align: left;
 }
 
-/* ===== Title ===== */
+/* ===== HEADER ===== */
 
 .contact-header {
     text-align: center;
@@ -22,65 +17,86 @@
 }
 
 .contact-header h1 {
+    color: #3C0D29;
     font-size: 40px;
+    margin-bottom: 10px;
     font-weight: 700;
-    color: var(--card);
 }
 
-/* ===== Cards ===== */
+.contact-header p {
+    font-size: 18px;
+    color: #5c4c4c;
+}
+
+
+/* ====== CARDS AREA ====== */
 
 .contact-cards {
     display: flex;
     justify-content: center;
     gap: 25px;
+    flex-wrap: wrap;
     margin-bottom: 50px;
 }
 
 .ccard {
-    width: 280px;
-    background: var(--card);
-    color: white;
-    padding: 35px;
-    border-radius: 14px;
+    background: white;
+    width: 260px;
+    padding: 25px;
     text-align: center;
-    cursor: pointer;
-    transition: 0.4s ease;
-    border: 2px solid var(--gold);
-    box-shadow: 0 8px 15px rgba(0,0,0,0.25);
+    border-radius: 16px;
+    border: 1px solid #e0d6c3;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: 0.3s;
 }
 
 .ccard:hover {
-    transform: translateY(-10px) scale(1.03);
-    background: var(--hover);
-    box-shadow: 0 15px 25px rgba(0,0,0,0.35);
+    transform: translateY(-7px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
 }
 
-.icon {
-    margin-bottom: 15px;
+.ccard h3 {
+    font-size: 22px;
+    margin-top: 15px;
+    color: #3C0D29;
+    font-weight: 600;
 }
 
-/* ===== Contact Content ===== */
+.ccard p {
+    font-size: 15px;
+    color: #5e5e5e;
+    margin-top: 5px;
+}
+
+
+/* ===== BODY LAYOUT ===== */
 
 .contact-body {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 35px;
+    gap: 25px;
+    align-items: start;
 }
+
+
+/* ===== MAP ===== */
 
 .contact-map {
-    width: 100%;
-    height: 360px;
+    height: 380px;
     border-radius: 14px;
     overflow: hidden;
-    border: 2px solid var(--card);
+    border: 2px solid #C6A667;
 }
 
-/* ===== Form ===== */
+
+/* ===== FORM ===== */
 
 .contact-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 14px;
+    border: 1px solid #e6dcca;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .form-grid {
@@ -88,58 +104,75 @@
     gap: 15px;
 }
 
-input, textarea {
+input,
+textarea {
     width: 100%;
-    background: white;
-    color: var(--text);
-    padding: 15px;
-    border-radius: 12px;
-    border: 2px solid #d6c7b4;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid #cfcfcf;
+    background: #fafafa;
     font-size: 15px;
-    transition: 0.3s;
-}
-
-input:focus, textarea:focus {
-    border-color: var(--card);
 }
 
 textarea {
-    height: 140px;
+    resize: none;
+    height: 130px;
 }
 
-.btn-send {
-    margin-top: 10px;
-    background: var(--card);
+/* SUCCESS MESSAGE */
+
+.success-msg {
     color: white;
-    padding: 16px;
+    background: #3C0D29;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* ========== NEW ADDITION FOR LOGIN REQUIRED ========== */
+
+.login-required {
+    background: #3C0D29;
+    color: #C6A667;
+    padding: 15px;
     border-radius: 10px;
-    cursor: pointer;
+    text-align: center;
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+
+/* SEND BUTTON */
+
+.btn-send {
+    width: 100%;
+    padding: 14px;
+    margin-top: 15px;
     border: none;
-    font-size: 18px;
+    border-radius: 10px;
+    background: #3C0D29;
+    color: #C6A667;
+    font-size: 17px;
+    cursor: pointer;
+    font-weight: 600;
     transition: 0.3s;
-    border: 2px solid var(--gold);
 }
 
 .btn-send:hover {
-    background: var(--hover);
-    transform: scale(1.02);
+    background: #5b193c;
 }
 
-.success-msg {
-    color: var(--card);
-    font-weight: bold;
-}
 
-/* ===== Responsive ===== */
+/* ====== RESPONSIVE ====== */
 
-@media(max-width: 900px){
+@media (max-width: 900px) {
+
     .contact-body {
         grid-template-columns: 1fr;
     }
-}
 
-@media(max-width: 600px){
     .contact-cards {
-        flex-direction: column;
+        gap: 15px;
     }
 }
