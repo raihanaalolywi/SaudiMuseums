@@ -6,6 +6,8 @@
 {% block content %}
 
 <link rel="stylesheet" href="{% static 'css/sinup.css' %}">
+<link rel="stylesheet" href="{% static 'css/message.css' %}">
+
 
 <div class="signup-body">
 
@@ -51,6 +53,16 @@
             <div class="input-group">
                 <label>Profile Picture (Optional)</label>
                 <input type="file" name="avatar" accept="image/*">
+            </div>
+
+            <!-- اختيار نوع الحساب -->
+            <div class="input-group">
+                <label>Account Type</label>
+                <select name="account_type" required>
+                    <option value="">-- Choose Account Type --</option>
+                    <option value="user">User (مستخدم عادي)</option>
+                    <option value="authority">Authority (هيئة)</option>
+                </select>
             </div>
 
             <button class="submit-btn" type="submit">Create Account</button>

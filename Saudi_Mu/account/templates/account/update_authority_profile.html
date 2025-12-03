@@ -1,0 +1,44 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Update {{ authority.name }}{% endblock %}
+
+{% block content %}
+
+<div class="container my-5">
+    <h3>Update Authority Profile</h3>
+
+    <form method="POST" enctype="multipart/form-data" class="mt-4">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label>Name</label>
+            <input type="text" name="name" class="form-control" value="{{ authority.name }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Description</label>
+            <textarea name="description" class="form-control" rows="4">{{ authority.description }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label>Website</label>
+            <input type="url" name="website_link" class="form-control" value="{{ authority.website_link }}">
+        </div>
+
+        <div class="mb-3">
+            <label>Location</label>
+            <input type="text" name="location" class="form-control" value="{{ authority.location }}">
+        </div>
+
+        <div class="mb-3">
+            <label>Change Image</label><br>
+            <img src="{{ authority.image.url }}" width="120" class="mb-2">
+            <input type="file" name="image" class="form-control">
+        </div>
+
+        <button class="btn btn-primary">Save</button>
+    </form>
+</div>
+
+{% endblock %}

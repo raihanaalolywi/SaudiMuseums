@@ -6,12 +6,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Saudi Museum{% endblock %}</title>
+
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/messages.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
+<!-- NAVBAR -->
 <nav class="base-navbar">
-
     <div class="base-left">
         <span class="base-logo">Saudi Museum</span>
     </div>
@@ -19,70 +22,97 @@
     <div class="base-center">
         <a class="base-link" href="{% url 'home' %}">Home</a>
         <a class="base-link" href="{% url 'add_authority' %}">Add Authority</a>
-        <a class="base-link" href="{% url 'all_authority' %}">All Authority </a>
+        <a class="base-link" href="{% url 'all_authority' %}">All Authority</a>
         <a class="base-link" href="{% url 'booking' %}">Booking</a>
         <a class="base-link" href="{% url 'contact_us' %}">Contact Us</a>
     </div>
 
     <div class="base-right">
 
-        <!-- Language Dropdown -->
+        <!-- LANGUAGE DROPDOWN -->
         <div class="dropdown">
             <button class="icon-btn" id="languageBtn">🌐</button>
             <div class="dropdown-content">
                 <button onclick="doTranslate('en')">English</button>
-                <button onclick="doTranslate('ar')">العربية</button>
+                <button onclick="doTranslate('ar')">Arabic</button>
             </div>
         </div>
 
         {% if user.is_authenticated %}
-            <!-- Show profile if user has avatar -->
-            {% if user.profile.avatar %}
+            
+            {% if authority_account %}
+                <!-- حساب هيئة -->
+                <a class="profile-link" href="{% url 'authority_profile' authority_account.id %}">
+                    <img src="{{ user.profile.avatar.url }}" class="nav-avatar" alt="Avatar">
+                    <span class="nav-username">{{ authority_account.name }}</span>
+                </a>
+            
+            {% else %}
+                <!-- حساب مستخدم -->
                 <a class="profile-link" href="{% url 'account:user_profile_view' user_name=user.username %}">
-                    <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="nav-avatar">
+                    <img src="{{ user.profile.avatar.url }}" class="nav-avatar" alt="Avatar">
                     <span class="nav-username">{{ user.username }}</span>
                 </a>
             {% endif %}
 
-            <!-- LOGOUT - Only shown when logged in -->
-        <a class="icon-btn" href="{% url 'account:log_out' %}">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <polyline points="16 17 21 12 16 7"></polyline>
-                <line x1="21" y1="12" x2="9" y2="12"></line>
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-            </svg>
-        </a>
+            <a class="icon-btn" href="{% url 'account:log_out' %}">Log Out</a>
+
         {% else %}
-            <!-- SIGN IN - Only shown when NOT logged in -->
-       <div class="base-right">
-        <a class="icon-btn" href="{% url 'account:sign_in' %}">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <circle cx="12" cy="7" r="4"></circle>
-                <path d="M12 14c-5 0-8 2.5-8 5v2"></path>
-            </svg>
-        </a>
-
-        <a class="icon-btn" href="{% url 'account:sign_up' %}">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <circle cx="12" cy="7" r="4"></circle>
-                <path d="M12 14c-5 0-8 2.5-8 5v2"></path>
-                <path d="M19 12v6"></path>
-                <path d="M16 15h6"></path>
-            </svg>
-        </a>
-    </div>
-</nav>
-
-
+            <a class="icon-btn" href="{% url 'account:sign_in' %}">Sign In</a>
+            <a class="icon-btn" href="{% url 'account:sign_up' %}">Sign Up</a>
         {% endif %}
-
     </div>
-
 </nav>
 
-{% block content %}{% endblock %}
 
-<!-- Google Translate Hidden -->
+<!-- MESSAGES (fixed under navbar) -->
+<div class="messages-fixed-top" style="position: fixed; top: 70px; left: 50%; transform: translateX(-50%); z-index: 1050; width: 90%; max-width: 800px;">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-2 text-center" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+
+<!-- MAIN CONTENT -->
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+
+<!-- FOOTER -->
+<footer class="site-footer mt-5">
+    <div class="footer-container d-flex justify-content-between flex-wrap">
+
+        <div class="footer-about">
+            <h3>Saudi Museum</h3>
+        </div>
+
+        <div class="footer-links">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'all_del_museum' %}">All Museums</a></li>
+                <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-contact">
+            <h4>Contact Us</h4>
+            <p>Email: info@saudimuseum.com</p>
+            <p>Phone: 0045614700</p>
+        </div>
+    </div>
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- GOOGLE TRANSLATE -->
 <div id="google_translate_element" style="display:none;"></div>
 
 <script type="text/javascript">
@@ -90,20 +120,16 @@ function googleTranslateElementInit() {
     new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
 }
 
-// Additional script to remove Google Translate bar
 window.addEventListener('load', function() {
     var translateBar = document.querySelector('.goog-te-banner-frame');
-    if (translateBar) {
-        translateBar.style.display = 'none';
-    }
-    
+    if (translateBar) translateBar.style.display = 'none';
+
     document.body.style.top = '0';
     document.body.style.position = 'static';
 });
-</script>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-<script>
+
+/* DROPDOWN LOGIC */
 const dropdown = document.querySelector('.dropdown');
 const btn = document.getElementById('languageBtn');
 
@@ -111,83 +137,20 @@ btn.addEventListener('click', () => {
     dropdown.classList.toggle('show');
 });
 
-function doTranslate(lang) {
-    document.cookie = "googtrans=/en/" + lang + ";path=/";
-    location.reload();
-}
-
 document.addEventListener('click', function(event) {
     if (!dropdown.contains(event.target)) {
         dropdown.classList.remove('show');
     }
 });
+
+function doTranslate(lang) {
+    document.cookie = "googtrans=/en/" + lang + ";path=/";
+    location.reload();
+}
 </script>
 
-
-
-
-
-
-
-<footer class="footer">
-
-    <div class="footer-container">
-
-        <!-- لاحظي فقط أضفت social هنا -->
-        <div class="footer-section social">
-            <h4>Social Media</h4>
-
-            <div class="footer-icons">
-
-                <a href="{% url 'contact_us' %}">
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <rect x="3" y="5" width="18" height="14" rx="2"></rect>
-                        <polyline points="3 7 12 13 21 7"></polyline>
-                    </svg>
-                </a>
-
-                <a href="#">
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M23 3c-1 .5-2 .7-3 1a4.5 4.5 0 0 0-7.7 4A12.8 12.8 0 0 1 3 4s-4 9 5 13c-3 .9-5 .8-7 1 9 5 20 0 20-11"></path>
-                    </svg>
-                </a>
-
-                <a href="#">
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <rect x="2" y="2" width="20" height="20" rx="5"></rect>
-                        <path d="M16 11.37A4 4 0 1112.63 8"></path>
-                    </svg>
-                </a>
-
-            </div>
-        </div>
-
-        <div class="footer-section left-align">
-            <h4>Links</h4>
-            <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'add_authority' %}">Add Authority</a>
-            <a href="{% url 'all_del_museum' %}">All Museums</a>
-            <a href="{% url 'contact_us' %}">Contact Us</a>
-        </div>
-
-        <div class="footer-section left-align">
-            <h3>Saudi Museum</h3>
-            <p>A platform for discovering the best museums and institutions in Saudi Arabia</p>
-        </div>
-
-    </div>
-
-    <p class="footer-end">جميع الحقوق محفوظة 2025 © Saudi Museum</p>
-
-</footer>
+<script type="text/javascript"
+        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-

@@ -24,6 +24,10 @@ class Bookmark(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
+class AuthorityProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='authorityprofile')
+    name = models.CharField(max_length=255)
+    logo = models.ImageField(upload_to='authority_logos/', blank=True, null=True)
 
 
 

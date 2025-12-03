@@ -17,7 +17,8 @@ body {
     height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* محاذاة لليسار */
+    padding-left: 50px; /* مسافة من اليسار */
     position: relative;
     color: #fff;
 }
@@ -34,7 +35,7 @@ body {
 .hero-content {
     position: relative;
     z-index:1;
-    text-align: center;
+    text-align: left; /* النص لليسار */
     max-width: 600px;
 }
 
@@ -51,7 +52,7 @@ body {
 .search-box {
     display: flex;
     gap: 10px;
-    justify-content: center;
+    justify-content: flex-start; /* المحاذاة لليسار */
 }
 
 .search-box input {
@@ -76,12 +77,6 @@ body {
     background-color: #a09b89;
 }
 
-
-
-
-
-
-
 .museum-intro.container {
     padding: 60px 20px;
 }
@@ -98,6 +93,7 @@ body {
 
 .intro-text {
     flex: 1;
+    text-align: left; /* النص لليسار */
 }
 
 .intro-text h2 {
@@ -127,11 +123,14 @@ body {
 @media(max-width: 768px) {
     .intro-box {
         flex-direction: column;
-        text-align: center;
+        text-align: left; /* محاذاة لليسار */
     }
 
     .intro-image img {
         height: 250px;
     }
-}
 
+    .search-box {
+        justify-content: flex-start;
+    }
+}

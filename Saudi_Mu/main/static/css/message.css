@@ -1,0 +1,52 @@
+/* messages.css */
+.messages-container {
+    position: fixed;        /* ثابت أسفل الهيدر */
+    top: 70px;              /* حسب ارتفاع الهيدر */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 800px;
+    z-index: 1050;
+}
+
+.message-card {
+    padding: 12px 20px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: slideDown 0.3s ease;
+}
+
+.message-card.success {
+    background-color: #28a745; /* أخضر */
+}
+
+.message-card.error {
+    background-color: #dc3545; /* أحمر */
+}
+
+.message-card.warning {
+    background-color: #ffc107; /* أصفر */
+    color: #000;
+}
+
+.message-card.info {
+    background-color: #17a2b8; /* أزرق */
+}
+
+.message-close {
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    color: inherit;
+    cursor: pointer;
+}
+
+@keyframes slideDown {
+    from {opacity: 0; transform: translateY(-20px);}
+    to {opacity: 1; transform: translateY(0);}
+}

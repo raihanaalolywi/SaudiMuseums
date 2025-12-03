@@ -3,3 +3,4 @@ from .models import Authority, AuthorityType
 
 
 admin.site.register(AuthorityType)
+admin.site.register(Authority)
