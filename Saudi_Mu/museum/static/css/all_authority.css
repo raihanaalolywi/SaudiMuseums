@@ -1,29 +1,74 @@
 .page-title {
+    text-align: right;
     text-align: center;
     font-size: 30px;
     margin: 25px 0;
     color: var(--bg);
 }
 
+/* ================= FILTER BUTTON ================= */
+.filter-box {
+    width: 180px;
+    padding: 10px 15px;
+    margin-bottom: 25px;
+    background: var(--bg);
+    color: white;
+    border-radius: 25px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-left: 40px;
+    margin-right: auto;
+}
+
+.filter-box select {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    width: 100%;
+    background: transparent;
+    color: rgb(255, 251, 251) !important;
+    text-align: left; /* الكلمة داخل الفلتر يسار */
+}
+
+.filter-box option {
+    color: black !important;
+}
+
+
 /* ================= CARDS LAYOUT ================= */
 .card-container {
     display: flex;
     flex-wrap: wrap;
     gap: 25px;
-    justify-content: center;
+    justify-content: flex-start;
+    margin-left: 40px;
+    
 }
 
 /* ================= SINGLE CARD ================= */
 .authority-card {
     width: 300px;
-    background: #fff;
-    border: 2px solid var(--gold);
-    border-radius: 14px;
+    background: #ffffff;
+    border-radius: 20px;
+    padding-bottom: 15px;
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    color: var(--bg);
+    transition: .3s;
+    
 }
 
-/* IMAGE */
+.authority-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,.25);
+}
+
+/* ================= IMAGE ================= */
 .authority-img {
     width: 100%;
     height: 180px;
@@ -31,12 +76,13 @@
     border-bottom: 2px solid var(--gold);
 }
 
-/* CONTENT AREA */
+/* ================= CONTENT ================= */
 .authority-content {
     padding: 15px;
+    text-align: left;
 }
 
-/* NAME */
+/* ================= NAME ================= */
 .authority-name {
     margin: 0;
     font-size: 22px;
@@ -44,103 +90,97 @@
     color: var(--bg);
 }
 
-/* TYPE */
-.authority-type {
+/* ================= DESCRIPTION ================= */
+.authority-desc {
     margin-top: 6px;
-    font-size: 15px;
+    font-size: 14px;
     color: #444;
 }
 
-/* LOCATION TEXT */
+/* ================= LOCATION ================= */
 .authority-location {
-    margin-top: 10px;
+    margin-top: 12px;
     font-size: 16px;
-    color: #444;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
 }
 
-/* ================= MAP ICON BUTTON ================= */
-.map-btn {
-    display: inline-block;
-    margin-top: 10px;
-    cursor: pointer;
-}
-
-.map-btn svg {
+.authority-location a svg {
     width: 26px;
     height: 26px;
-    fill: var(--gold);
+    fill: #C6A667;
 }
 
-/* Hover Effect */
-.map-btn svg:hover {
-    transform: scale(1.12);
-    transition: 0.2s;
+.authority-location span {
+    display: inline-block;
 }
 
-/* WHEN EMPTY */
-.empty-msg {
-    text-align: center;
-    font-size: 18px;
-    color: #666;
+/* ================= TYPE ================= */
+.authority-type {
+    margin: 10px 0;
+    font-size: 15px;
+    color: var(--bg);
+}
+
+/* ================= ACTION BUTTONS ================= */
+.auth-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+.auth-btn {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: 1px solid var(--bg);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--bg);
+    transition: .2s;
+}
+
+.auth-btn.read {
+    background: var(--gold);
+    color: var(--bg);
+    font-weight: 700;
+}
+
+.auth-btn.update {
+    background: transparent;
+}
+
+.auth-btn.delete {
+    background: transparent;
+    border-color: #ff5e5e;
 }
 
 /* ===================== RESPONSIVE ===================== */
 @media (max-width: 768px) {
 
-    .page-title {
-        font-size: 26px;
+    .filter-box {
+        width: 100%;
+        margin: 0 auto 20px;
+        justify-content: center;
     }
 
-    .authority-card {
-        width: 90%;
-    }
-
-    .authority-img {
-        height: 200px;
-    }
-
-    .authority-name {
-        font-size: 20px;
-    }
-
-    .authority-type,
-    .authority-location {
-        font-size: 15px;
-    }
-
-    .map-btn svg {
-        width: 30px;
-        height: 30px;
+    .card-container {
+        justify-content: center;
+        margin-left: 0;
     }
 }
 
-/*Responsive*/
-
-
 @media (max-width: 480px) {
 
-    .authority-card {
+    .filter-box {
         width: 100%;
-        margin: 0 10px;
+        margin: 0 auto 15px;
+        justify-content: center;
     }
 
-    .authority-img {
-        height: 180px;
-    }
-
-    .authority-name {
-        font-size: 20px;
-    }
-
-    .authority-type,
-    .authority-location {
-        font-size: 14px;
-    }
-
-    .map-btn svg {
-        width: 28px;
-        height: 28px;
+    .card-container {
+        justify-content: center;
+        margin-left: 0;
     }
 }

@@ -7,37 +7,71 @@
 
 <h2 class="page-title">All Authorities</h2>
 
+<form method="GET" class="filter-box">
+    <select name="type" onchange="this.form.submit()">
+        <option value="">All</option>
+        {% for t in types %}
+            <option value="{{ t.id }}"
+                {% if selected == t.id|stringformat:"s" %}selected{% endif %}>
+                {{ t.name }}
+            </option>
+        {% endfor %}
+    </select>
+</form>
+
 <div class="card-container">
 
     {% for a in authorities %}
     <div class="authority-card">
 
-        <!-- صورة الهيئة -->
+        <!-- الصورة -->
         <img class="authority-img" src="{{ a.image.url }}" alt="{{ a.name }}">
 
         <div class="authority-content">
 
-            <!-- اسم الهيئة -->
+            <!-- الاسم -->
             <h3 class="authority-name">{{ a.name }}</h3>
 
-            <!-- نوع الهيئة -->
-            <p class="authority-type">
-                <strong>Type:</strong> {{ a.type }}
+            <!-- الوصف -->
+            <p class="authority-desc">
+                {{ a.description|slice:":70" }}...
             </p>
 
             <!-- الموقع -->
-            <p class="authority-location">
-                {{ a.location }}
+            <div class="authority-location">
+                <a href="{{ a.map_url }}" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="#C6A667" viewBox="0 0 24 24">
+                        <path d="M12 2C8.146 2 5 5.146 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.854-3.146-7-7-7zm0 
+                        9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5z"/>
+                    </svg>
+                </a>
+                <span>{{ a.location }}</span>
+            </div>
+
+            <!-- النوع -->
+            <p class="authority-type">
+                <strong>Type :</strong> {{ a.type }}
             </p>
 
-            <!-- رابط الخريطة كأيقونة فقط -->
-            {% if a.map_url %}
-            <a href="{{ a.map_url }}" target="_blank" class="map-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="#C6A667" viewBox="0 0 24 24">
-                    <path d="M12 2C8.146 2 5 5.146 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.854-3.146-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5z"/>
-                </svg>
-            </a>
-            {% endif %}
+            <!-- الأزرار -->
+            <div class="auth-actions">
+
+                <a href="{% url 'details' a.id %}" class="auth-btn read">Read More</a>
+
+                {# ملاحظة: هذا هو التعديل الجديد لزر التحديث #}
+                <a href="{% url 'update_authority' a.id %}"
+                   class="auth-btn update"
+                   onclick="return confirm('هل تريد تعديل هذه الهيئة؟');">
+                    Update
+                </a>
+
+                <!-- زر الحذف -->
+                <a href="{% url 'delete_authority' a.id %}"
+                   class="auth-btn delete"
+                   onclick="return confirm('هل أنت متأكد أنك تريد حذف هذه الهيئة؟');">
+                    Delete
+                </a>
+            </div>
 
         </div>
 
