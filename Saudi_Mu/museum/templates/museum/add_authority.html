@@ -1,7 +1,6 @@
 {% extends "main/base.html" %}
 {% load static %}
 
-
 {% block content %}
 
 <link rel="stylesheet" href="{% static 'css/add_authority.css' %}">
@@ -16,8 +15,22 @@
     </div>
     {% endif %}
 
-    <h2 class="authority-title">Add Your Authority</h2>
-    <p class="authority-sub">Fill in your authority information</p>
+    <!-- العنوان يتغير حسب إذا كنا في وضع تعديل أو إضافة -->
+    <h2 class="authority-title">
+        {% if update_mode %}
+            Update Authority
+        {% else %}
+            Add Your Authority
+        {% endif %}
+    </h2>
+
+    <p class="authority-sub">
+        {% if update_mode %}
+            Modify authority information
+        {% else %}
+            Fill in your authority information
+        {% endif %}
+    </p>
 
     <form method="POST" enctype="multipart/form-data" class="authority-form">
         {% csrf_token %}
@@ -28,32 +41,44 @@
             {{ form.type }}
         </div>
 
+        <!-- اسم الهيئة -->
         <div class="authority-group">
             <label>Authority Name</label>
             {{ form.name }}
         </div>
 
+        <!-- الوصف -->
         <div class="authority-group">
             <label>Description</label>
             {{ form.description }}
         </div>
 
+        <!-- الموقع النصي -->
         <div class="authority-group">
             <label>Location</label>
             {{ form.location }}
         </div>
 
+        <!-- رابط قوقل ماب -->
         <div class="authority-group">
             <label>Google Map Link</label>
             {{ form.map_url }}
         </div>
 
+        <!-- صورة الهيئة -->
         <div class="authority-group">
             <label>Authority Image</label>
             {{ form.image }}
         </div>
 
-        <button class="authority-btn">Submit</button>
+        <!-- زر الإرسال يتغير حسب الوضع -->
+        <button class="authority-btn">
+            {% if update_mode %}
+                Update
+            {% else %}
+                Submit
+            {% endif %}
+        </button>
 
     </form>
 </div>

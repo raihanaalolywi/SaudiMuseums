@@ -1,0 +1,209 @@
+/* ===== page wrapper ===== */
+.detail-page {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 15px;
+    font-family: "Poppins", sans-serif;
+    text-align: left;
+}
+
+/* page title */
+.page-title {
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--bg);
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+/* ================== AUTHORITY CARD ================== */
+.authority-detail-card {
+    display: flex;
+    gap: 25px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    padding: 20px;
+    border: 1px solid var(--gold);
+    text-align: left;
+    flex-direction: row-reverse;
+}
+
+.detail-image img {
+    width: 320px;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 3px solid var(--gold);
+}
+
+.detail-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.detail-type {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--gold);
+}
+
+.detail-name {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--bg);
+}
+
+.detail-desc {
+    font-size: 15px;
+    color: #444;
+    line-height: 1.5;
+}
+
+/* location row */
+.detail-location-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detail-location-row svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* ===================== MUSEUMS SECTION ===================== */
+.museums-section {
+    margin-top: 50px;
+    text-align: left;
+}
+
+.museums-title {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    color: var(--bg);
+    text-align: left;
+}
+
+/* museums layout */
+.museums-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+    direction: ltr;            /* ✔ يجعل أول بطاقة تبدأ يسار */
+}
+
+/* museum card */
+.museum-card {
+    width: 300px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--gold);
+    box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+    transition: .3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: left;
+    justify-content: flex-end;
+    float: left;              /* ✔ تثبيت دائم يسار */
+}
+
+.museum-card:hover {
+    transform: translateY(-5px);
+}
+
+/* museum image */
+.museum-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    border: 1px solid var(--gold);
+}
+
+.museum-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--bg);
+    margin: 5px 0;
+}
+
+.museum-location,
+.museum-time {
+    font-size: 14px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 4px 0;
+}
+
+/* description */
+.museum-desc {
+    font-size: 14px;
+    color: #555;
+    margin-top: 5px;
+}
+
+/* ================== ACTION BUTTONS ================== */
+
+.museum-actions {
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.museum-btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    border: 1px solid var(--bg);
+    color: var(--bg);
+    transition: .2s;
+}
+
+/* primary read */
+.museum-btn.read {
+    background: var(--gold);
+    color: var(--bg);
+    font-weight: 700;
+}
+
+/* update & delete transparent */
+.museum-btn.update {
+    background: transparent;
+}
+
+.museum-btn.delete {
+    background: transparent;
+    border-color: #ff5e5e;
+    color: #ff5e5e;
+}
+
+/* ================== RESPONSIVE ================== */
+
+@media (max-width: 768px) {
+
+    .authority-detail-card {
+        flex-direction: column;
+        text-align: left;
+    }
+
+    .detail-image img {
+        width: 100%;
+    }
+
+    .museums-grid {
+        justify-content: center;
+    }
+}

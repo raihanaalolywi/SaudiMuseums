@@ -1,3 +1,6 @@
+
+
+
 {% extends "main/base.html" %}
 {% load static %}
 
@@ -15,8 +18,22 @@
     </div>
     {% endif %}
 
-    <h2 class="authority-title">Add Museum</h2>
-    <p class="authority-sub">For Authority: {{ authority.name }}</p>
+    <!-- العنوان يتغير حسب الوضع -->
+    <h2 class="authority-title">
+        {% if update_mode %}
+            Update Museum
+        {% else %}
+            Add Museum
+        {% endif %}
+    </h2>
+
+    <p class="authority-sub">
+        {% if update_mode %}
+            Modify museum information
+        {% else %}
+            For Authority: {{ authority.name }}
+        {% endif %}
+    </p>
 
     <form method="POST" enctype="multipart/form-data" class="authority-form">
         {% csrf_token %}
@@ -41,7 +58,6 @@
             {{ form.image }}
         </div>
 
-        <!-- NEW Time fields -->
         <div class="authority-group">
             <label>Open Time</label>
             {{ form.open_time }}
@@ -52,9 +68,23 @@
             {{ form.close_time }}
         </div>
 
-        <button class="authority-btn">Submit</button>
+        <!-- Google map url -->
+        <div class="authority-group">
+            <label>Google Map URL</label>
+            {{ form.map_url }}
+        </div>
+
+        <!-- زر الإرسال يتغير -->
+        <button class="authority-btn">
+            {% if update_mode %}
+                Update
+            {% else %}
+                Submit
+            {% endif %}
+        </button>
 
     </form>
 </div>
 
 {% endblock %}
+

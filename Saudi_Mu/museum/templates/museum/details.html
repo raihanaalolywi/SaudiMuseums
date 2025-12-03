@@ -1,0 +1,124 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/details.css' %}">
+
+<div class="detail-page">
+
+    <!-- =============== PAGE TITLE =============== -->
+    <h1 class="page-title">Authority Information</h1>
+
+
+    <!-- =============== AUTHORITY CARD =============== -->
+    <div class="authority-detail-card">
+
+        <div class="detail-image">
+            <img src="{{ authority.image.url }}" alt="{{ authority.name }}">
+        </div>
+
+        <div class="detail-info">
+
+            <span class="detail-type">{{ authority.type }}</span>
+
+            <h2 class="detail-name">{{ authority.name }}</h2>
+
+            <p class="detail-desc">
+                {{ authority.description }}
+            </p>
+
+            <div class="detail-location-row">
+
+                <!-- icon open link -->
+                <a href="{{ authority.map_url }}" target="_blank" class="detail-map-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="#C6A667" viewBox="0 0 24 24">
+                        <path d="M12 2C8.146 2 5 5.146 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.854-3.146-7-7-7zm0 
+                        9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5z"/>
+                    </svg>
+                </a>
+
+                <span class="detail-location-text">{{ authority.location }}</span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =============== MUSEUMS SECTION =============== -->
+    <div class="museums-section">
+
+        <h2 class="museums-title">Authority Museums</h2>
+
+        {% if museums %}
+        <div class="museums-grid">
+            {% for m in museums %}
+            <div class="museum-card">
+
+                <!-- museum img -->
+                <img class="museum-img" src="{{ m.image.url }}" alt="{{ m.name }}">
+
+                <div class="museum-content">
+
+                    <!-- name -->
+                    <h3 class="museum-name">{{ m.name }}</h3>
+
+                    <!-- location -->
+                    <div class="museum-location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#C6A667" viewBox="0 0 24 24">
+                            <path d="M12 2C8.146 2 5 5.146 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.854-3.146-7-7-7zm0 
+                            9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5z"/>
+                        </svg>
+                        {{ m.location }}
+                    </div>
+
+                    <!-- time -->
+                    {% if m.open_time and m.close_time %}
+                    <div class="museum-time">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#C6A667" viewBox="0 0 24 24">
+                            <path d="M12 1a11 11 0 1 0 11 11A11.012 11.012 0 0 0 12 1Zm1 11h4a1 1 0 0 1 0 
+                            2h-5a1 1 0 0 1-1-1V6a1 1 0 0 1 2 0Z"/>
+                        </svg>
+                        {{ m.open_time }} - {{ m.close_time }}
+                    </div>
+                    {% endif %}
+
+                    <!-- description -->
+                    {% if m.description %}
+                    <p class="museum-desc">
+                        {{ m.description|slice:":120" }}...
+                    </p>
+                    {% endif %}
+                </div>
+
+                <!-- museum actions -->
+                <div class="museum-actions">
+                    <a href="#" class="museum-btn read">Read More</a>
+
+                    <!-- تم تعديل زر Update -->
+                    <a href="{% url 'update_museum' m.id %}" class="museum-btn update">
+                        Update
+                    </a>
+
+                    <!-- حذف المتحف -->
+                    <a href="{% url 'delete_museum' m.id %}"
+                       class="museum-btn delete"
+                       onclick="return confirm('Are you sure you want to delete this museum?');">
+                        Delete
+                    </a>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+
+        {% else %}
+        <p class="empty-msg">No museums added for this authority yet.</p>
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

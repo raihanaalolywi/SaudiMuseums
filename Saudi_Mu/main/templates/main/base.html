@@ -18,8 +18,8 @@
 
     <div class="base-center">
         <a class="base-link" href="{% url 'home' %}">Home</a>
-        <a class="base-link" href="{% url 'add_authority' %}">Add Authority</a>
-        <a class="base-link" href="{% url 'all_authority' %}">All Authority </a>
+        <a href="{% url 'add_authority' %}">Add Authority</a>
+        <a href="{% url 'all_authority' %}">All Authority </a>
         <a class="base-link" href="{% url 'booking' %}">Booking</a>
         <a class="base-link" href="{% url 'contact_us' %}">Contact Us</a>
     </div>
@@ -166,7 +166,6 @@ document.addEventListener('click', function(event) {
             <h4>Links</h4>
             <a href="{% url 'home' %}">Home</a>
             <a href="{% url 'add_authority' %}">Add Authority</a>
-            <a href="{% url 'all_del_museum' %}">All Museums</a>
             <a href="{% url 'contact_us' %}">Contact Us</a>
         </div>
 
