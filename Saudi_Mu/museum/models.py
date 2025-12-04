@@ -48,26 +48,20 @@ class Museum(models.Model):
 
     def __str__(self):
         return self.name
+    
 
 
+    # اضفت المودل لاضافة تعليق هنا 
 
-
-class Booking(models.Model):
+class MuseumComment(models.Model):
+    museum = models.ForeignKey(Museum, on_delete=models.CASCADE, related_name="comments")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    museum = models.ForeignKey(Museum, on_delete=models.CASCADE)
-    booked_at = models.DateTimeField(auto_now_add=True)
 
+    comment = models.TextField()                     
+    rating = models.IntegerField(default=1)         
+
+    created_at = models.DateTimeField(auto_now_add=True)  
 
     def __str__(self):
-        return f"{self.user.username} booked {self.museum.name}"
+        return f"{self.user.username} - {self.museum.name}"
 
-
-
-class Bookmark(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    museum = models.ForeignKey('Museum', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-
-    def __str__(self):
-        return f"{self.user.username} bookmarked {self.museum.name}"

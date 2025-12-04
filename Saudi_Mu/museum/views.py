@@ -5,6 +5,10 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Authority, AuthorityType, Museum
 from .forms import AuthorityForm, MuseumForm
+from .models import Authority, Museum, MuseumComment  # اضفت تعديل هنا 
+from django.core.paginator import Paginator # اضفت برضو هنا سطر اضافي  لعملية  pagination
+ 
+
 
 from django.db.models import Q
 
@@ -33,7 +37,7 @@ def add_authority(request):
 
         if form.is_valid():
 
-            # ملاحظة: هذا هو الشرط الجديد لمنع تكرار نوع الهيئة فقط
+            #  هذا هو الشرط الجديد لمنع تكرار نوع الهيئة فقط
             selected_type = form.cleaned_data["type"]
             if Authority.objects.filter(type=selected_type).exists():
                 messages.error(request, "هذا النوع من الهيئات مستخدم مسبقًا ولا يمكن إضافته مرة أخرى.")
@@ -141,16 +145,67 @@ def add_museum(request, authority_id):
         "authority": authority
     })
 
-
-# تفاصيل الهيئة
+# هنا عدلت عليه لاجل اضافة تعليق 
 def details(request, authority_id):
+
     authority = get_object_or_404(Authority, id=authority_id)
     museums = Museum.objects.filter(authority=authority)
 
-    return render(request, 'museum/details.html', {
+  
+    
+
+    # استقبال تعليق جديد
+    if request.method == "POST":
+
+        if not request.user.is_authenticated:
+            return redirect("login")  # يمنع مستخدم غير مسجل دخول
+
+        comment_text = request.POST.get("comment")
+        rating = request.POST.get("rating")
+        museum_id = request.POST.get("museum_id")
+
+        # جلب المتحف المُختار من القائمة
+        museum = get_object_or_404(Museum, id=museum_id)
+
+        # إنشاء التعليق
+        MuseumComment.objects.create(
+            museum=museum,
+            user=request.user,
+            comment=comment_text,
+            rating=rating
+        )
+
+        return redirect("details", authority_id=authority.id)
+    
+ 
+    #  هنا نضيف ال Pagination لعرض التعليقات 
+  
+    all_comments = MuseumComment.objects.filter(
+        museum__authority=authority
+    ).order_by("-created_at")
+
+    from django.core.paginator import Paginator
+    paginator = Paginator(all_comments, 3)  # 3 تعليقات لكل صفحة
+    page_number = request.GET.get("page")
+    comments_page = paginator.get_page(page_number)
+
+    # تجهيز التعليقات لكل متحف (كودك القديم ما نلمسه)
+    museums_with_comments = []
+    for museum in museums:
+        comments = museum.comments.all().order_by("-created_at")
+        museums_with_comments.append((museum, comments))
+
+    return render(request, "museum/details.html", {
         "authority": authority,
-        "museums": museums
+        "museums_with_comments": museums_with_comments,
+        "museums": museums,
+        
+        #  نرسل صفحة التعليقات للـ HTML
+        "comments_page": comments_page,
+
     })
+
+
 
 
 def all_del_museum(request):
