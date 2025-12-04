@@ -55,7 +55,9 @@ Authorities have additional privileges:
 📄 https://drive.google.com/file/d/usecase.pdf
 ---
 ## 📌 Wireframe
-📄 https://drive.google.com/file/d/pi.pdf
+## 📌 Wireframe
+📄 [Wireframe Document](https://drive.google.com/file/d/1l1WbhkL6cSS292hLlTvFsTnjHziVYR5m/view)
+
 
 ---
 
