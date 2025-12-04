@@ -39,20 +39,20 @@ Authorities have additional privileges:
 
 ## 📌 User Stories
 📄 **User Stories PDF:**  
-[https://drive.google.com/file/d/1redh.pdf](https://drive.google.com/file/d/1redh.pdf)
+📄 [User Story Document](https://drive.google.com/file/d/1SD-5w8uV4dsGAy2TOF8W9EJ9Z6pZ0c7J/view)
 
 ---
 
 ## 📌 UML Diagrams
 
 ### 🔹 Sequence Diagram  
-📄 https://drive.google.com/file/d/sequence.pdf
+📄 [Sequence Diagram](https://drive.google.com/file/d/1GDZmaWbm5R1NHb5p0993qsthysO4xYuq/view)
 
 ### 🔹 Class Diagram  
-📄 https://drive.google.com/file/d/classs%20R.pdf
+📄 [Class Diagram](https://drive.google.com/file/d/1odoYRSxSQBlk9CP1jk72zAh-2oF2PeLb/view)
 
 ### 🔹 Use Case Diagram  
-📄 https://drive.google.com/file/d/usecase.pdf
+📄 [Use Case Diagram](https://drive.google.com/file/d/1PQDCQoudrplPJsEhbtCzst3dWkVCadj4/view)
 ---
 ## 📌 Wireframe
 ## 📌 Wireframe
