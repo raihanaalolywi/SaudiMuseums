@@ -13,6 +13,7 @@ class AuthorityType(models.Model):
 # مودل لاضافة الهيئات 
 class Authority(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    
 
     # ربط الهيئة بنوع الهيئة
     type = models.ForeignKey(

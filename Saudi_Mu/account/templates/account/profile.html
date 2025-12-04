@@ -29,27 +29,85 @@
         </div>
     </div>
 
-<!-- Stats Cards -->
-<div class="row g-3 mb-4 text-center">
-    <div class="col-md-4">
-        <div class="stats-card">
-            <h3>{{ visited_museums_count|default:0 }}</h3>
-            <p>Visited Museums</p>
+    <!-- Stats Cards -->
+    <div class="row g-3 mb-4 text-center">
+        <div class="col-md-4">
+            <div class="stats-card">
+                <h3>{{ visited_museums_count|default:0 }}</h3>
+                <p>Visited Museums</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card">
+                <h3>{{ bookmarks_count|default:0 }}</h3>
+                <p>Bookmarks</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card">
+                <h3>{{ user_comments|length|default:0 }}</h3>
+                <p>Comments</p>
+            </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="stats-card">
-            <h3>{{ bookmarks_count|default:0 }}</h3>
-            <p>Bookmarks</p>
+
+  
+
+<!-- Bookmarks Section -->
+<div class="bookmarks-card mb-4">
+    <h5 class="mb-3">Bookmarks</h5>
+    {% if bookmarks %}
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for b in bookmarks %}
+            <div class="col">
+                <div class="card h-100">
+                    <img src="{{ b.museum.image.url }}" 
+                         class="card-img-top" 
+                         alt="{{ b.museum.name }}" 
+                         style="height:150px; object-fit:cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ b.museum.name }}</h5>
+                        <p class="text-muted mb-1">Authority: {{ b.museum.authority.name }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="stats-card">
-            <h3>{{ user_comments|length|default:0 }}</h3>
-            <p>Comments</p>
-        </div>
-    </div>
+    {% else %}
+        <p class="text-muted mb-0">No bookmarks yet.</p>
+    {% endif %}
 </div>
+
+<!-- Visited Museums Section -->
+<div class="visited-museums-card mb-4">
+    <h5 class="mb-3">Visited Museums</h5>
+    {% if visited_museums %}
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for b in visited_museums %}
+            <div class="col">
+                <div class="card h-100">
+                    <img src="{{ b.museum.image.url }}" 
+                         class="card-img-top" 
+                         alt="{{ b.museum.name }}" 
+                         style="height:150px; object-fit:cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ b.museum.name }}</h5>
+                        <p class="text-muted mb-1">Authority: {{ b.museum.authority.name }}</p>
+                        <small class="text-muted d-block">Booked on: {{ b.booked_at|date:"Y-m-d H:i" }}</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted mb-0">No visited museums yet.</p>
+    {% endif %}
+</div>
+
+
+
+
+
 
 
     <!-- Comments Section -->

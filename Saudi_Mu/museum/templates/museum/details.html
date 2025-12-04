@@ -50,6 +50,13 @@
     <div class="museums-section">
 
         <h2 class="museums-title">Authority Museums</h2>
+ {% if user.is_authenticated and user.authorityprofile %}
+    <a href="{% url 'add_museum' authority.id %}" class="museum-btn add" style="margin-bottom: 20px; display:inline-block;">
+        + Add Museum
+    </a>
+{% endif %}
+
+
 
         {% if museums %}
         <div class="museums-grid">
@@ -94,7 +101,12 @@
 
                 <!-- museum actions -->
                 <div class="museum-actions">
-                    <a href="#" class="museum-btn read">Read More</a>
+<a class="base-link" href="{% url 'booking' %}">Booking</a>
+                    <!-- Bookmark -->
+<a href="{% url 'add_museum_bookmark' m.id %}" class="bookmark-btn" title="Add to bookmarks">
+    ⭐
+</a>
+
 
                     <!-- تم تعديل زر Update -->
                     <a href="{% url 'update_museum' m.id %}" class="museum-btn update">

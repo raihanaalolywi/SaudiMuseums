@@ -9,19 +9,58 @@
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
 
 
-
-
 <!-- Hero Section -->
 <header class="hero">
     <div class="hero-content">
         <h1>Discover Saudi Arabia’s Museums and Cultural Hubs</h1>
         <p>Explore the museums and cultural centers across the Kingdom</p>
-<form class="search-box" action="{% url 'search' %}" method="GET">
+
+        <form class="search-box" action="{% url 'search' %}" method="GET">
             <input type="text" name="q" placeholder="Search for an authority or museum..." required>
             <button type="submit">Search</button>
         </form>
+
     </div>
 </header>
+
+
+
+
+
+<section class="authorities container">
+
+    <h2 class="section-title">Featured Authorities</h2>
+
+    <div class="authority-cards">
+
+        {% for a in authorities %}
+        <div class="authority-card">
+
+            <div class="auth-img-box">
+                {% if a.image %}
+                    <img src="{{ a.image.url }}" alt="{{ a.name }}">
+                {% else %}
+                    <img src="{% static 'image/default_authority.jpg' %}" alt="No Image">
+                {% endif %}
+            </div>
+
+            <div class="auth-info">
+                <h3>{{ a.name }}</h3>
+                <p>{{ a.description|truncatewords:15 }}</p>
+
+                <a href="{% url 'details' a.id %}" class="view-btn">View Details</a>
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+
+
 
 
 <section class="museum-intro">
@@ -39,11 +78,25 @@
 </section>
 
 
-<!-- Authorities Section -->
-<section class="authorities container">
 
-</section>
 
+<h2 class="home-section-title">Latest Museums</h2>
+
+<div class="home-museums-grid">
+    {% for m in museums %}
+    <div class="home-museum-card">
+        <img src="{{ m.image.url }}" class="home-museum-img" alt="{{ m.name }}">
+
+        <h3 class="home-museum-name">{{ m.name }}</h3>
+
+        <p class="home-museum-location">
+            {{ m.location }}
+        </p>
+
+        <a href="#" class="home-museum-btn">View Details</a>
+    </div>
+    {% endfor %}
+</div>
 
 
 
