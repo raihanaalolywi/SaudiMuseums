@@ -1,3 +1,17 @@
+
+
+/* booking.css */
+
+/* خلفية الصفحة كاملة */
+body {
+    background-color: #f9f8f6 !important; /* اختر اللون الذي تحبه */
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+
+
 .booking-box {
     max-width: 800px;
     margin: 4rem auto;
@@ -33,6 +47,8 @@
     text-align: center;
     z-index: 2;
 }
+
+
 
 .booking-header h2 {
     font-size: 2rem;
@@ -73,22 +89,23 @@
 }
 
 .btn-submit {
-    background: rgb(67, 29, 29);
-    color: white;
-    border: none;
-    padding: 0.8rem 1rem;
-    font-size: 1rem;
-    border-radius: 10px;
     width: 100%;
+    padding: 14px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 10px;
+    background: #411111;
+    color: #f6f0e6;
+    font-size: 17px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    font-weight: 600;
+    transition: 0.3s;
 }
 
 .btn-submit:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102,126,234,0.4);
-}
+    background: #73252d;
 
+}
 @media (max-width: 768px) {
     .booking-video-wrapper {
         height: 180px;

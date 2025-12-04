@@ -123,8 +123,8 @@ def add_museum(request, authority_id):
     authority = get_object_or_404(Authority, id=authority_id)
     
      # تحقق من أن المستخدم هو صاحب الهيئة
-    if not hasattr(request.user, 'authorityprofile') or request.user.authorityprofile.id != authority_id:
-        messages.error(request, "You are not allowed to add a museum to this authority.")
+    # تحقق أن صاحب الهيئة هو المستخدم
+    if request.user != authority.owner:
         return redirect('home')
     
     if request.method == "POST":

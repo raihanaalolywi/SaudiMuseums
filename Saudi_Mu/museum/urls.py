@@ -9,6 +9,7 @@ urlpatterns = [
     path('authority/all/', views.all_authority, name='all_authority'),
 
     path('booking/', views.booking, name='booking'),
+    
     path('booking/<int:museum_id>/', views.add_booking, name='add_booking'),
     # مسار تفاصيل الهيئة
     path('details/<int:authority_id>/', views.details, name='details'),

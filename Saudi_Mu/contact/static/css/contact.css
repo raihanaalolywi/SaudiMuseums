@@ -4,7 +4,7 @@
 
 .contact-page {
     padding: 40px;
-    background:  #f4f1e9 !important;
+    background:  #f9f8f6 !important;
     direction: ltr;            
     text-align: left;
 }
@@ -17,7 +17,7 @@
 }
 
 .contact-header h1 {
-    color: #3C0D29;
+    color: #5e3838;
     font-size: 40px;
     margin-bottom: 10px;
     font-weight: 700;
@@ -101,7 +101,8 @@
 
 .form-grid {
     display: flex;
-    gap: 15px;
+    gap: 25px; /* بدل 15px */
+    margin-bottom: 20px;
 }
 
 input,
@@ -151,8 +152,8 @@ textarea {
     margin-top: 15px;
     border: none;
     border-radius: 10px;
-    background: #3C0D29;
-    color: #C6A667;
+    background: #411111;
+    color: #f6f0e6;
     font-size: 17px;
     cursor: pointer;
     font-weight: 600;
@@ -160,7 +161,7 @@ textarea {
 }
 
 .btn-send:hover {
-    background: #5b193c;
+    background: #73252d;
 }
 
 

@@ -76,10 +76,10 @@
                             <span>{{ museum.name }}</span>
 
                             <!-- زر تفاصيل المتحف -->
-                            <a href="{% url 'details' %}?id={{ museum.id }}"
-                               class="btn btn-outline-primary btn-sm">
-                                View Details
-                            </a>
+<a href="{% url 'details' museum.id %}" class="btn btn-outline-primary btn-sm">
+    View Details
+</a>
+                            
                         </li>
                     {% endfor %}
                 </ul>

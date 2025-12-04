@@ -5,100 +5,193 @@
 
 {% block content %}
 
+<!-- Libraries -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
 
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+<!-- ========================= HERO ========================= -->
+<section class="hero">
+    <div class="hero-overlay"></div>
 
-
-<!-- Hero Section -->
-<header class="hero">
-    <div class="hero-content">
-        <h1>Discover Saudi Arabia’s Museums and Cultural Hubs</h1>
-        <p>Explore the museums and cultural centers across the Kingdom</p>
+    <div class="hero-content" data-aos="fade-up">
+        <h1 class="hero-title">Discover Saudi Arabia’s Cultural Treasures</h1>
+        <p class="hero-subtitle">Explore museums, authorities, and heritage destinations across the Kingdom</p>
 
         <form class="search-box" action="{% url 'search' %}" method="GET">
-            <input type="text" name="q" placeholder="Search for an authority or museum..." required>
-            <button type="submit">Search</button>
+            <input type="text" name="q" placeholder="Search for museums, authorities..." required>
+            <button type="submit"><i class="fas fa-search"></i></button>
         </form>
+    </div>
+
+    <div class="scroll-down" data-aos="fade-up" data-aos-delay="300">
+        <i class="fas fa-chevron-down"></i>
+    </div>
+</section>
+
+
+
+<!-- ========================= AUTHORITIES ========================= -->
+<section class="section">
+    <div class="container">
+
+        <div class="section-head" data-aos="fade-up">
+            <h2>Featured Authorities</h2>
+            <p>Discover the leading cultural institutions across Saudi Arabia</p>
+        </div>
+
+        <div class="row g-4">
+            {% for a in authorities %}
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
+                <div class="card authority-card">
+
+                    <div class="card-img">
+                        {% if a.image %}
+                            <img src="{{ a.image.url }}" alt="">
+                        {% else %}
+                            <img src="{% static 'image/default_authority.jpg' %}" alt="">
+                        {% endif %}
+                        <div class="img-overlay">View Details</div>
+                    </div>
+
+                    <div class="card-body">
+                        <h3>{{ a.name }}</h3>
+                        <p>{{ a.description|truncatewords:15 }}</p>
+                        <a class="btn-main" href="{% url 'details' a.id %}">
+                            Explore <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
 
     </div>
-</header>
+</section>
 
 
 
+<!-- ========================= INTRO ========================= -->
+<section class="intro">
+    <div class="container">
+        <div class="row align-items-center g-5">
 
+            <div class="col-lg-6" data-aos="fade-right">
+                <h2 class="intro-title">A Journey Through Saudi History & Culture</h2>
+                <p class="intro-text">
+                    Explore museums and cultural hubs that highlight Saudi Arabia’s rich heritage. 
+                    Dive into unique stories, artifacts, and experiences that bring the past to life.
+                </p>
 
-<section class="authorities container">
-
-    <h2 class="section-title">Featured Authorities</h2>
-
-    <div class="authority-cards">
-
-        {% for a in authorities %}
-        <div class="authority-card">
-
-            <div class="auth-img-box">
-                {% if a.image %}
-                    <img src="{{ a.image.url }}" alt="{{ a.name }}">
-                {% else %}
-                    <img src="{% static 'image/default_authority.jpg' %}" alt="No Image">
-                {% endif %}
+                <div class="stats">
+                    <div class="stat"><h3>50+</h3><p>Museums</p></div>
+                    <div class="stat"><h3>100K+</h3><p>Visitors</p></div>
+                    <div class="stat"><h3>15+</h3><p>Cities</p></div>
+                </div>
             </div>
 
-            <div class="auth-info">
-                <h3>{{ a.name }}</h3>
-                <p>{{ a.description|truncatewords:15 }}</p>
-
-                <a href="{% url 'details' a.id %}" class="view-btn">View Details</a>
+            <div class="col-lg-6" data-aos="fade-left">
+                <div class="intro-img">
+                    <img src="{% static 'image/pho.jpg' %}" alt="">
+                </div>
             </div>
 
+        </div>
+    </div>
+</section>
+
+
+
+<!-- ========================= MUSEUMS ========================= -->
+<section class="section museum-carousel-section">
+  <div class="container">
+    <div class="section-head" data-aos="fade-up">
+      <h2>Latest Museums</h2>
+      <p>Explore the newest cultural destinations across the Kingdom</p>
+    </div>
+
+    <div class="carousel-wrapper">
+      <button class="carousel-btn prev">&lt;</button>
+      <div class="carousel">
+        {% for m in museums %}
+        <div class="museum-card {% if forloop.counter0 == 0 %}active{% endif %}">
+          <div class="museum-img">
+            <img src="{{ m.image.url }}" alt="{{ m.name }}">
+            <span class="new-badge">New</span>
+          </div>
+          <div class="card-body">
+            <h3>{{ m.name }}</h3>
+            <p><i class="fas fa-map-marker-alt"></i> {{ m.location }}</p>
+            <a href="#" class="btn-main">Visit Museum <i class="fas fa-arrow-right"></i></a>
+          </div>
         </div>
         {% endfor %}
-
+      </div>
+      <button class="carousel-btn next">&gt;</button>
     </div>
-
+  </div>
 </section>
 
 
 
 
-
-
-<section class="museum-intro">
-    <div class="intro-box">
-        <div class="intro-text">
-            <h2>Museum Highlights in Saudi Arabia</h2>
-            <p>
-                We are delighted to have you here, and we aim to provide an exceptional experience that helps you discover the most prominent cultural and heritage landmarks across the Kingdom.
-            </p>
-        </div>
-        <div class="intro-image">
-            <img src="{% static 'image/pho.jpg' %}" alt="Museum Highlights">
+<!-- ========================= CTA ========================= -->
+<section class="cta" data-aos="fade-up">
+    <div class="container">
+        <div class="cta-box">
+            <h2>Ready to Explore Saudi Heritage?</h2>
+            <p>Join thousands of visitors discovering museums and cultural gems</p>
+            <a href="{% url 'booking' %}" class="btn-cta">
+                Book Your Visit <i class="fas fa-calendar-alt ms-1"></i>
+            </a>
         </div>
     </div>
 </section>
 
 
 
+<!-- ========================= SCRIPTS ========================= -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    AOS.init({
+        duration: 1000,
+        once: true,
+        offset: 120
+    });
+</script>
+<!-- نهاية السكشن والصفحة -->
+<script>
+const carousel = document.querySelector('.carousel');
+const cards = document.querySelectorAll('.museum-card');
+const nextBtn = document.querySelector('.carousel-btn.next');
+const prevBtn = document.querySelector('.carousel-btn.prev');
 
-<h2 class="home-section-title">Latest Museums</h2>
+let currentIndex = 0;
 
-<div class="home-museums-grid">
-    {% for m in museums %}
-    <div class="home-museum-card">
-        <img src="{{ m.image.url }}" class="home-museum-img" alt="{{ m.name }}">
+function updateCarousel() {
+  cards.forEach((card, i) => {
+    card.classList.remove('active');
+  });
+  cards[currentIndex].classList.add('active');
 
-        <h3 class="home-museum-name">{{ m.name }}</h3>
+  const offset = -currentIndex * (cards[0].offsetWidth + 20) + (carousel.parentElement.offsetWidth/2 - cards[0].offsetWidth/2);
+  carousel.style.transform = `translateX(${offset}px)`;
+}
 
-        <p class="home-museum-location">
-            {{ m.location }}
-        </p>
+nextBtn.addEventListener('click', () => {
+  if(currentIndex < cards.length - 1) currentIndex++;
+  updateCarousel();
+});
 
-        <a href="#" class="home-museum-btn">View Details</a>
-    </div>
-    {% endfor %}
-</div>
+prevBtn.addEventListener('click', () => {
+  if(currentIndex > 0) currentIndex--;
+  updateCarousel();
+});
 
-
+updateCarousel();
+</script>
 
 
 {% endblock %}

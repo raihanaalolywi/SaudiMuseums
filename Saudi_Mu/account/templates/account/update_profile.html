@@ -39,13 +39,47 @@
                 <textarea name="about">{{ request.user.profile.about }}</textarea>
             </div>
 
-            <div class="input-group">
-                <label>Profile Picture</label>
-                {% if request.user.profile.avatar %}
-                    <img src="{{ request.user.profile.avatar.url }}" class="rounded-3 mb-2" style="width:120px; height:120px; object-fit:cover; border:3px solid #4A0E2E;">
-                {% endif %}
-                <input type="file" name="avatar" accept="image/*">
+            
+   <div class="mb-3">
+                <label class="form-label">Profile Picture</label>
+                <div class="mb-2">
+                    {% if request.user.profile.avatar %}
+                        <img id="avatarPreview" src="{{ request.user.profile.avatar.url }}" 
+                             class="rounded-3" 
+                             style="width:120px; height:120px; object-fit:cover; border:3px solid #4A0E2E;">
+                    {% else %}
+                        <img id="avatarPreview" src="" 
+                             class="rounded-3 d-none" 
+                             style="width:120px; height:120px; object-fit:cover; border:3px solid #4A0E2E;">
+                    {% endif %}
+                </div>
+                <input class="form-control" type="file" name="avatar" accept="image/*" id="avatarInput">
             </div>
+
+            <button class="submit-btn" type="submit">Update Profile</button>
+        </form>
+    </div>
+</div>
+
+<!-- ضع السكربت هنا بعد الفورم -->
+<script>
+    const avatarInput = document.getElementById('avatarInput');
+    const avatarPreview = document.getElementById('avatarPreview');
+
+    avatarInput.addEventListener('change', function(){
+        const file = this.files[0];
+        if (file){
+            const reader = new FileReader();
+            reader.onload = function(e){
+                avatarPreview.src = e.target.result;
+                avatarPreview.classList.remove('d-none');
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+
+
 
             <button class="submit-btn" type="submit">Update Profile</button>
         </form>

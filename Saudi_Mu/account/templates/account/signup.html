@@ -49,21 +49,24 @@
                 <label>Password</label>
                 <input type="password" name="password" placeholder="At least 8 characters" required>
             </div>
+<!-- صورة البروفايل -->
+<div class="mb-3">
+    <label class="form-label">Profile Picture (Optional)</label>
+    <input class="form-control" type="file" name="avatar" accept="image/*">
+</div>
 
-            <div class="input-group">
-                <label>Profile Picture (Optional)</label>
-                <input type="file" name="avatar" accept="image/*">
-            </div>
 
-            <!-- اختيار نوع الحساب -->
-            <div class="input-group">
-                <label>Account Type</label>
-                <select name="account_type" required>
-                    <option value="">-- Choose Account Type --</option>
-                    <option value="user">User (مستخدم عادي)</option>
-                    <option value="authority">Authority (هيئة)</option>
-                </select>
-            </div>
+<!-- اختيار نوع الحساب -->
+<div class="mb-3">
+    <label class="form-label">Account Type</label>
+    <select name="account_type" class="form-select" required>
+        <option value="">-- Choose Account Type --</option>
+        <option value="user"> User </option>
+        <option value="authority">Authority</option>
+    </select>
+</div>
+
+
 
             <button class="submit-btn" type="submit">Create Account</button>
         </form>

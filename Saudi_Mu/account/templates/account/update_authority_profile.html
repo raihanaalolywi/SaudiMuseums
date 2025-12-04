@@ -37,23 +37,31 @@
                     <input type="text" name="location" value="{{ authority.location }}" placeholder="Enter location">
                 </div>
 
-                <div class="input-group">
-                    <label>Authority Logo</label>
-                    {% if authority.image %}
-                        <img src="{{ authority.image.url }}" class="rounded-3 mb-2" style="width:120px; height:120px; object-fit:cover; border:3px solid #4A0E2E;">
-                    {% endif %}
-                    <input type="file" name="image" accept="image/*">
-                </div>
+   <div class="mb-3">
+    <label class="form-label">Authority Logo</label>
+
+    <!-- عرض الشعار الحالي أو المختار -->
+    <div class="mb-2">
+        {% if authority.image %}
+            <img id="logoPreview" src="{{ authority.image.url }}" 
+                 class="rounded-3" 
+                 style="width:120px; height:120px; object-fit:cover; border:3px solid #4A0E2E;">
+        {% else %}
+            <img id="logoPreview" src="" 
+                 class="rounded-3 d-none" 
+                 style="width:120px; height:120px; object-fit:cover; border:3px solid #4A0E2E;">
+        {% endif %}
+    </div>
+
+    <!-- حقل رفع الشعار -->
+    <input class="form-control" type="file" name="image" accept="image/*" id="logoInput">
+</div>
+
 
                 <button class="submit-btn" type="submit">Update Authority</button>
 
-                <div class="divider">
-                    <span>Or</span>
-                </div>
 
-                <a href="{% url 'account:authority_profile' authority_id=authority.id %}" class="cancel-link">
-                    Cancel and Go Back
-                </a>
+   
 
             </form>
 
