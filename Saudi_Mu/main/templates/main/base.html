@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +20,9 @@
 
     <div class="base-center">
         <a class="base-link" href="{% url 'home' %}">Home</a>
-        <a href="{% url 'add_authority' %}">Add Authority</a>
+{% if user.is_authenticated and user.authorityprofile %}
+    <a href="{% url 'add_authority' %}">Add Authority</a>
+{% endif %}
         <a href="{% url 'all_authority' %}">All Authority </a>
         <a class="base-link" href="{% url 'booking' %}">Booking</a>
         <a class="base-link" href="{% url 'contact_us' %}">Contact Us</a>
@@ -38,38 +39,76 @@
             </div>
         </div>
 
-        {% if user.is_authenticated %}
-            
-            {% if authority_account %}
-                <!-- حساب هيئة -->
-                <a class="profile-link" href="{% url 'authority_profile' authority_account.id %}">
-                    <img src="{{ user.profile.avatar.url }}" class="nav-avatar" alt="Avatar">
-                    <span class="nav-username">{{ authority_account.name }}</span>
-                </a>
-            
-            {% else %}
-                <!-- حساب مستخدم -->
-                <a class="profile-link" href="{% url 'account:user_profile_view' user_name=user.username %}">
-                    <img src="{{ user.profile.avatar.url }}" class="nav-avatar" alt="Avatar">
-                    <span class="nav-username">{{ user.username }}</span>
-                </a>
-            {% endif %}
-
-            <a class="icon-btn" href="{% url 'account:log_out' %}">Log Out</a>
-
+     {% if user.is_authenticated %}
+    
+    {% with authority=user.authority_set.first %}
+        {% if authority %}
+            <!-- حساب هيئة -->
+            <a class="profile-link" href="{% url 'account:authority_profile' authority_id=authority.id %}">
+                {% if authority.image %}
+                    <img src="{{ authority.image.url }}" class="nav-avatar" alt="Logo">
+                {% else %}
+                    <img src="{% static 'image/default_authority.png' %}" class="nav-avatar" alt="Default Logo">
+                {% endif %}
+                <span class="nav-username">{{ authority.name }}</span>
+            </a>
+        
         {% else %}
-            <a class="icon-btn" href="{% url 'account:sign_in' %}">Sign In</a>
-            <a class="icon-btn" href="{% url 'account:sign_up' %}">Sign Up</a>
+            <!-- حساب مستخدم عادي -->
+            <a class="profile-link" href="{% url 'account:user_profile_view' user_name=user.username %}">
+                {% if user.profile.avatar %}
+                    <img src="{{ user.profile.avatar.url }}" class="nav-avatar" alt="Avatar">
+                {% else %}
+                    <img src="{% static 'image/default_user.png' %}" class="nav-avatar" alt="Default Avatar">
+                {% endif %}
+                <span class="nav-username">{{ user.username }}</span>
+            </a>
         {% endif %}
+    {% endwith %}
+
+    <!-- LOGOUT -->
+    <a class="icon-btn" href="{% url 'account:log_out' %}">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+    </a>
+{% else %}
+    <!-- SIGN IN -->
+    <a class="icon-btn" href="{% url 'account:sign_in' %}">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M2 12h14"></path>
+            <path d="M8 8l-6 4 6 4"></path>
+        </svg>
+    </a>
+    
+    <!-- SIGN UP -->
+    <a class="icon-btn" href="{% url 'account:sign_up' %}">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+            <circle cx="12" cy="7" r="4"></circle>
+            <path d="M12 14c-5 0-8 2.5-8 5v2"></path>
+            <path d="M19 12v6"></path>
+            <path d="M16 15h6"></path>
+        </svg>
+    </a>
+{% endif %}
     </div>
 </nav>
-
 
 <!-- MESSAGES (fixed under navbar) -->
 <div class="messages-fixed-top" style="position: fixed; top: 70px; left: 50%; transform: translateX(-50%); z-index: 1050; width: 90%; max-width: 800px;">
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-2 text-center" role="alert">
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} 
+    alert-dismissible fade show mb-2 text-center" role="alert">
                 {{ message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -84,32 +123,6 @@
 </main>
 
 
-<!-- FOOTER -->
-<footer class="site-footer mt-5">
-    <div class="footer-container d-flex justify-content-between flex-wrap">
-
-        <div class="footer-about">
-            <h3>Saudi Museum</h3>
-        </div>
-
-        <div class="footer-links">
-            <h4>Quick Links</h4>
-            <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-               
-                <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
-            </ul>
-        </div>
-
-        <div class="footer-contact">
-            <h4>Contact Us</h4>
-            <p>Email: info@saudimuseum.com</p>
-            <p>Phone: 0045614700</p>
-        </div>
-    </div>
-</footer>
-
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- GOOGLE TRANSLATE -->
@@ -120,16 +133,18 @@ function googleTranslateElementInit() {
     new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
 }
 
+// إخفاء شريط Google Translate بشكل كامل وغير مزعج
 window.addEventListener('load', function() {
     var translateBar = document.querySelector('.goog-te-banner-frame');
-    if (translateBar) translateBar.style.display = 'none';
-
-    document.body.style.top = '0';
-    document.body.style.position = 'static';
+    if (translateBar) {
+        translateBar.style.transform = 'scale(0.1)';
+        translateBar.style.transformOrigin = 'top left';
+        translateBar.style.opacity = '0';
+        translateBar.style.pointerEvents = 'none';
+    }
 });
 
-
-/* DROPDOWN LOGIC */
+// Dropdown logic
 const dropdown = document.querySelector('.dropdown');
 const btn = document.getElementById('languageBtn');
 
@@ -143,17 +158,15 @@ document.addEventListener('click', function(event) {
     }
 });
 
+// تغيير اللغة عند الضغط على زر
 function doTranslate(lang) {
     document.cookie = "googtrans=/en/" + lang + ";path=/";
     location.reload();
 }
 </script>
 
-
-
-
-
-
+<!-- تحميل سكربت Google Translate -->
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 <footer class="footer">
 

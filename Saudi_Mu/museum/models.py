@@ -13,6 +13,7 @@ class AuthorityType(models.Model):
 # مودل لاضافة الهيئات 
 class Authority(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    
 
     # ربط الهيئة بنوع الهيئة
     type = models.ForeignKey(
@@ -47,3 +48,26 @@ class Museum(models.Model):
 
     def __str__(self):
         return self.name
+
+
+
+
+class Booking(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    museum = models.ForeignKey(Museum, on_delete=models.CASCADE)
+    booked_at = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return f"{self.user.username} booked {self.museum.name}"
+
+
+
+class Bookmark(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    museum = models.ForeignKey('Museum', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return f"{self.user.username} bookmarked {self.museum.name}"

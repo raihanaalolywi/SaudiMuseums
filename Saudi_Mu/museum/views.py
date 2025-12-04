@@ -1,13 +1,32 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 from .models import Authority, AuthorityType, Museum
 from .forms import AuthorityForm, MuseumForm
 
+from django.db.models import Q
 
+from museum.models import  Museum
+from museum.models import Bookmark
+
+
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from .models import Museum, Booking
+
+
+
+@login_required(login_url='account:sign_in')  # تأكد من تسجيل الدخول
 # إضافة هيئة جديدة
 def add_authority(request):
+
+    if not request.user.is_staff:  # ممكن تغير الشرط حسب مشروعك
+        return redirect('home')  # ارجاعه للصفحة الرئيسية
+
 
     if request.method == "POST":
         form = AuthorityForm(request.POST, request.FILES)
@@ -51,9 +70,17 @@ def all_authority(request):
     })
 
 
+
+
 # تحديث الهيئة
+@login_required(login_url='account:sign_in')
 def update_authority(request, authority_id):
     authority = get_object_or_404(Authority, id=authority_id)
+
+    # تحقق إذا المستخدم هو المالك أو أدمن
+    if request.user != authority.owner and not request.user.is_staff:
+        messages.error(request, "ليس لديك صلاحية تعديل هذه الهيئة")
+        return redirect('home')  # ارجاع للصفحة الرئيسية
 
     if request.method == "POST":
         form = AuthorityForm(request.POST, request.FILES, instance=authority)
@@ -72,7 +99,15 @@ def update_authority(request, authority_id):
 
 
 # حذف هيئة
+@login_required(login_url='account:sign_in')
 def delete_authority(request, authority_id):
+
+    
+    # تحقق إذا المستخدم هو المالك أو أدمن
+    if request.user != authority.owner and not request.user.is_staff:
+        messages.error(request, "ليس لديك صلاحية حذف هذه الهيئة")
+        return redirect('home')  # ارجاع للصفحة الرئيسية
+    
     authority = get_object_or_404(Authority, id=authority_id)
     authority.delete()
     messages.success(request, "تم حذف الهيئة بنجاح")
@@ -82,7 +117,12 @@ def delete_authority(request, authority_id):
 # إضافة متحف للهيئة
 def add_museum(request, authority_id):
     authority = get_object_or_404(Authority, id=authority_id)
-
+    
+     # تحقق من أن المستخدم هو صاحب الهيئة
+    if not hasattr(request.user, 'authorityprofile') or request.user.authorityprofile.id != authority_id:
+        messages.error(request, "You are not allowed to add a museum to this authority.")
+        return redirect('home')
+    
     if request.method == "POST":
         form = MuseumForm(request.POST, request.FILES)
 
@@ -90,8 +130,7 @@ def add_museum(request, authority_id):
             museum = form.save(commit=False)
             museum.authority = authority
             museum.save()
-
-            messages.success(request, "تمت إضافة المتحف للهيئة بنجاح")
+            messages.success(request, "The museum has been successfully added to the authority")
             return redirect('add_museum', authority_id=authority_id)
 
     else:
@@ -119,19 +158,18 @@ def all_del_museum(request):
 
 
 # الحجز
-def booking(request):
-    authorities = Authority.objects.all()
-    museums = Museum.objects.all()
 
-    context = {
-        'authorities': authorities,
-        'museums': museums,
-    }
-    return render(request, 'museum/booking.html', context)
-
-
-def search(request):
-    return render(request, 'museum/search.html')
+@login_required
+def add_booking(request, museum_id):
+    museum = get_object_or_404(Museum, id=museum_id)
+    booking, created = Booking.objects.get_or_create(user=request.user, museum=museum)
+    
+    if created:
+        messages.success(request, "تم حجز المتحف بنجاح!")
+    else:
+        messages.info(request, "لقد قمت بحجز هذا المتحف مسبقًا.")
+    
+    return redirect('account:user_profile', user_name=request.user.username)
 
 
 # API
@@ -170,3 +208,97 @@ def update_museum(request, museum_id):
         "authority": museum.authority,
         "update_mode": True,
     })
+
+
+
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import Authority, Museum
+
+def search(request):
+    query = request.GET.get('q', '').strip()
+
+    if not query:
+        return render(request, 'museum/search.html', {"no_results": True, "query": query})
+
+    # البحث عن الهيئة
+    authorities = Authority.objects.filter(name__icontains=query)
+    museums = Museum.objects.filter(name__icontains=query)
+
+    # إذا وجدنا هيئة واحدة فقط، نعيد صفحة التفاصيل مباشرة
+    if authorities.count() == 1 and museums.count() == 0:
+        authority = authorities.first()
+        museums_of_authority = Museum.objects.filter(authority=authority)
+        return render(request, 'museum/details.html', {
+            "authority": authority,
+            "museums": museums_of_authority
+        })
+
+    # إذا وجدنا متحف واحد فقط
+    if museums.count() == 1 and authorities.count() == 0:
+        museum = museums.first()
+        authority = museum.authority
+        museums_of_authority = Museum.objects.filter(authority=authority)
+        return render(request, 'museum/details.html', {
+            "authority": authority,
+            "museums": museums_of_authority
+        })
+
+    # إذا كانت النتائج متعددة أو لا توجد نتيجة
+    no_results = not authorities.exists() and not museums.exists()
+    return render(request, 'museum/search.html', {
+        "authorities": authorities,
+        "museums": museums,
+        "no_results": no_results,
+        "query": query
+    })
+
+
+
+
+
+
+
+def add_museum_bookmark(request, museum_id):
+    if not request.user.is_authenticated:
+        messages.error(request, "يجب تسجيل الدخول أولاً لإضافة المتحف للمفضلة")
+        return redirect('account:sign_in')
+
+    museum = get_object_or_404(Museum, id=museum_id)
+    bookmark, created = Bookmark.objects.get_or_create(user=request.user, museum=museum)
+
+    if created:
+        messages.success(request, "تمت إضافة المتحف للمفضلة!")
+    else:
+        messages.info(request, "هذا المتحف موجود بالفعل في المفضلة")
+
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
+
+
+@login_required
+def booking(request):
+    authorities = Authority.objects.all()
+    museums = Museum.objects.all()
+
+    if request.method == "POST":
+        museum_id = request.POST.get("museum")
+        if museum_id:
+            museum = get_object_or_404(Museum, id=museum_id)
+            booking, created = Booking.objects.get_or_create(user=request.user, museum=museum)
+            if created:
+                messages.success(request, "تم حجز المتحف بنجاح!")
+            else:
+                messages.info(request, "لقد قمت بحجز هذا المتحف مسبقًا.")
+            return redirect('account:user_profile_view', user_name=request.user.username)
+
+    context = {
+        'authorities': authorities,
+        'museums': museums,
+    }
+    return render(request, 'museum/booking.html', context)
+
+
+

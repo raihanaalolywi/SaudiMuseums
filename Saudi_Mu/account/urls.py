@@ -16,5 +16,13 @@ path('authority-profile/<int:authority_id>/', views.authority_profile, name='aut
 
 path('authority/update/<int:authority_id>/', views.update_authority_profile, name="update_authority_profile"),
 
+
+
+
+
+
+
+
+
   # غيرنا الاسم للسهولة
 ]

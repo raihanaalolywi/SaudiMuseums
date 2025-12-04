@@ -6,6 +6,8 @@ from django.contrib import messages
 from django.db import transaction, IntegrityError
 from .models import Profile
 from museum.models import Authority, Museum
+from museum.models import Bookmark
+from museum.models import Booking, Bookmark
 
 # -----------------------------
 # Sign Up
@@ -110,10 +112,20 @@ def user_profile_view(request: HttpRequest, user_name):
     except User.DoesNotExist:
         messages.error(request, "User not found.")
         return redirect("home")
+    
+    bookmarks = Bookmark.objects.filter(user=user).select_related('museum')
+
+    # كل الـ bookings (زيارات المتاحف)
+    bookings = Booking.objects.filter(user=user).select_related('museum', 'museum__authority').order_by('-booked_at')
+
 
     context = {
         "user": user,
         "profile": profile,
+        "bookmarks": bookmarks,
+        "bookmarks_count": bookmarks.count(),
+        "visited_museums": bookings,
+        "visited_museums_count": bookings.count(),
     }
     return render(request, 'account/profile.html', context)
 
@@ -196,3 +208,7 @@ def update_user_profile(request):
 
     context = {"user": user, "profile": profile}
     return render(request, "account/update_profile.html", context)
+
+
+
+

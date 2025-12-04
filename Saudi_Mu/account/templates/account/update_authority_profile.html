@@ -5,40 +5,61 @@
 
 {% block content %}
 
-<div class="container my-5">
-    <h3>Update Authority Profile</h3>
+<link rel="stylesheet" href="{% static 'css/account.css' %}">
 
-    <form method="POST" enctype="multipart/form-data" class="mt-4">
-        {% csrf_token %}
+<div class="signup-body">
 
-        <div class="mb-3">
-            <label>Name</label>
-            <input type="text" name="name" class="form-control" value="{{ authority.name }}" required>
+    <div class="signup-box">
+
+        <div class="side-image"></div>
+
+        <div class="form-container">
+
+            <h2>Update Authority Profile</h2>
+            <p class="desc">Fill in the information below to update your authority details.</p>
+
+            <form action="{% url 'account:update_authority_profile' authority_id=authority.id %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="input-group">
+                    <label>Authority Name</label>
+                    <input type="text" name="name" value="{{ authority.name }}" placeholder="Enter authority name" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Description</label>
+                    <textarea name="description" rows="4" placeholder="Tell us about your authority">{{ authority.description }}</textarea>
+                </div>
+
+
+                <div class="input-group">
+                    <label>Location</label>
+                    <input type="text" name="location" value="{{ authority.location }}" placeholder="Enter location">
+                </div>
+
+                <div class="input-group">
+                    <label>Authority Logo</label>
+                    {% if authority.image %}
+                        <img src="{{ authority.image.url }}" class="rounded-3 mb-2" style="width:120px; height:120px; object-fit:cover; border:3px solid #4A0E2E;">
+                    {% endif %}
+                    <input type="file" name="image" accept="image/*">
+                </div>
+
+                <button class="submit-btn" type="submit">Update Authority</button>
+
+                <div class="divider">
+                    <span>Or</span>
+                </div>
+
+                <a href="{% url 'account:authority_profile' authority_id=authority.id %}" class="cancel-link">
+                    Cancel and Go Back
+                </a>
+
+            </form>
+
         </div>
+    </div>
 
-        <div class="mb-3">
-            <label>Description</label>
-            <textarea name="description" class="form-control" rows="4">{{ authority.description }}</textarea>
-        </div>
-
-        <div class="mb-3">
-            <label>Website</label>
-            <input type="url" name="website_link" class="form-control" value="{{ authority.website_link }}">
-        </div>
-
-        <div class="mb-3">
-            <label>Location</label>
-            <input type="text" name="location" class="form-control" value="{{ authority.location }}">
-        </div>
-
-        <div class="mb-3">
-            <label>Change Image</label><br>
-            <img src="{{ authority.image.url }}" width="120" class="mb-2">
-            <input type="file" name="image" class="form-control">
-        </div>
-
-        <button class="btn btn-primary">Save</button>
-    </form>
 </div>
 
 {% endblock %}
