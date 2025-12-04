@@ -116,9 +116,83 @@
         {% else %}
         <p class="empty-msg">No museums added for this authority yet.</p>
         {% endif %}
+     <!-- =============== ADD COMMENT BOX =============== -->
+<div class="add-comment-box">
+
+    <h2 class="comment-title">Add Your Comment</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <!-- اختيار المتحف -->
+        <label>Select Museum:</label>
+        <select name="museum_id" required>
+            {% for m in museums %}
+                <option value="{{ m.id }}">{{ m.name }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- نص التعليق -->
+        <label>Your Comment:</label>
+        <textarea name="comment" placeholder="Write your comment..." required></textarea>
+
+        <!-- التقييم -->
+        <label>Rating (1–5):</label>
+        <select name="rating" required>
+            <option value="1">⭐ 1</option>
+            <option value="2">⭐ 2</option>
+            <option value="3">⭐ 3</option>
+            <option value="4">⭐ 4</option>
+            <option value="5">⭐ 5</option>
+        </select>
+
+        <button type="submit" class="comment-submit-btn">Submit Comment</button>
+    </form>
+
+</div>
+
+
+
+<!-- =============== COMMENTS SECTION =============== -->
+<div class="comments-box">
+
+    <h3 class="comments-title">Visitor Comments</h3>
+
+    <div class="comments-grid">
+        {% for c in comments_page %}
+        <div class="comment-card">
+
+            <div class="comment-header">
+                <span class="comment-rating">⭐ {{ c.rating }}/5</span>
+                <span class="comment-museum">{{ c.museum.name }}</span>
+            </div>
+
+            <p class="comment-text">{{ c.comment }}</p>
+
+            <span class="comment-user">By: {{ c.user.username }}</span>
+        </div>
+        {% empty %}
+        <p class="no-comments">No comments yet.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <div class="comments-pagination">
+        {% if comments_page.has_previous %}
+            <a href="?page={{ comments_page.previous_page_number }}" class="pag-btn">Previous</a>
+        {% endif %}
+
+        {% if comments_page.has_next %}
+            <a href="?page={{ comments_page.next_page_number }}" class="pag-btn">Next</a>
+        {% endif %}
+    </div>
+
+</div>
+
+
 
     </div>
 
 </div>
 
-{% endblock %}
+{% endblock %} 

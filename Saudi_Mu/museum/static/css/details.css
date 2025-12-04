@@ -190,6 +190,171 @@
     color: #ff5e5e;
 }
 
+
+
+/* هنا اضفت تعديل تنسيق  اضافة تعليق */
+
+/* ================== COMMENT CARD =============== */
+.add-comment-box {
+    background: #fff;
+    border: 1px solid var(--gold);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin: 40px auto;
+    width: 95%;
+    max-width: 900px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+}
+
+/* العنوان */
+.comment-title {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 18px;
+    color: var(--bg);
+}
+
+/* ترتيب الحقول جنب بعض */
+.add-comment-box form {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* عناصر النموذج */
+.add-comment-box label {
+    font-weight: 600;
+    color: var(--bg);
+    margin-right: 5px;
+    font-size: 15px;
+}
+
+.add-comment-box select,
+.add-comment-box textarea {
+    border: 1px solid #bbb;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* حجم مربع التعليق */
+.add-comment-box textarea {
+    width: 240px;
+    height: 35px;
+    resize: none;
+}
+
+/* زر الإرسال */
+.comment-submit-btn {
+    background: var(--gold);
+    color: var(--bg);
+    padding: 7px 20px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.comment-submit-btn:hover {
+    opacity: 0.85;
+}
+
+
+/*   حق ال  pagintion   اضفاه مني */
+.comments-box {
+    background: #fff;
+    border: 1px solid var(--gold);
+    border-radius: 14px;
+    padding: 20px;
+    margin: 40px auto;
+    width: 95%;
+    max-width: 1000px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.comments-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--bg);
+    margin-bottom: 20px;
+}
+
+/* grid 3 بطاقات */
+.comments-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+/* بطاقة التعليق */
+.comment-card {
+    background: #fafafa;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+    transition: .2s;
+}
+
+.comment-card:hover {
+    transform: translateY(-3px);
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.comment-rating {
+    font-size: 15px;
+    color: var(--gold);
+    font-weight: bold;
+}
+
+.comment-museum {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--bg);
+}
+
+.comment-text {
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.comment-user {
+    font-size: 13px;
+    color: #777;
+}
+
+/* pagination buttons */
+.comments-pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pag-btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    background: var(--gold);
+    color: var(--bg);
+    text-decoration: none;
+    margin: 0 5px;
+    font-weight: 700;
+}
+
+.pag-btn:hover {
+    opacity: .8;
+}
+
+
+
+
+
 /* ================== RESPONSIVE ================== */
 
 @media (max-width: 768px) {
