@@ -1,73 +1,320 @@
 {% extends 'main/base.html' %}
 {% load static %}
-
-{% block title %}Update {{ authority.name }}{% endblock %}
-
+{% block title %}Update Profile{% endblock %}
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'css/account.css' %}">
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Body Container */
+    .signup-body {
+        background: #F5F1E8;
+        font-family: "Tajawal", sans-serif;
+        min-height: 100vh;
+        padding: 50px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Main Box */
+    .signup-box {
+        background: white;
+        width: 100%;
+        max-width: 1100px; /* 💡 تم تكبير البوكس الرئيسي هنا */
+        border-radius: 30px;
+        overflow: hidden;
+        display: flex;
+        box-shadow: 0 15px 45px rgba(0,0,0,0.15);
+    }
+
+    /* --------------- LEFT SIDE IMAGE --------------- */
+    .side-image {
+        width: 45%; /* تم الإبقاء على النسب للحفاظ على التصميم */
+        background: #381416ba ;
+        position: relative;
+        padding: 70px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 30px 120px 120px 30px; 
+        overflow: hidden;
+    }
+
+    .side-image::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        background: url("{% static 'image/ppi.jpg' %}") center/cover no-repeat;
+        opacity: 0.28;
+        z-index: 1; 
+    }
+
+    .side-image h1 {
+        color: white;
+        z-index: 2;
+        font-size: 38px;
+        font-weight: 700;
+        text-align: center;
+        line-height: 1.4;
+    }
+
+    /* --------------- RIGHT FORM CONTAINER --------------- */
+    .form-container {
+        width: 55%; /* تم الإبقاء على النسب للحفاظ على التصميم */
+        padding: 60px 50px;
+        background: white;
+    }
+
+    h2 {
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: #2E2E2E;
+    }
+
+    .desc {
+        color: #6b6b6b;
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+
+    .input-group { 
+        margin-bottom: 22px; 
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .input-group label {
+        display: block;
+        margin-bottom: 7px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #303030;
+    }
+
+    .input-group input:not([type="file"]),
+    .input-group textarea {
+        width: 100%;
+        background: #FAFAFA;
+        border: 2px solid #E4E4E4;
+        padding: 13px 15px;
+        border-radius: 10px;
+        font-size: 14px;
+        transition: .3s;
+    }
+
+    .input-group input:focus,
+    .input-group textarea:focus {
+        border-color: #5B4B6B;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(91,75,107,0.12);
+        outline: none;
+    }
+
+    textarea {
+        resize: none;
+        height: 110px;
+    }
+
+    /* Style for File Input - RESTORED/REFINED STYLING */
+    input[type="file"] {
+        width: 100%;
+        background: #FAFAFA;
+        border: 2px dashed #CFCFCF; /* 💡 إعادة الحد المتقطع */
+        padding: 12px 15px; /* تباعد داخلي جيد */
+        border-radius: 10px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: .3s;
+    }
+    
+    input[type="file"]:hover {
+        border-color: #5B4B6B;
+        background: #fff;
+    }
+    
+    /* جعل الزر الافتراضي لا يظهر كتأثير زر */
+    input[type="file"]::-webkit-file-upload-button {
+      background: #FAFAFA;
+      color: #303030;
+      border: 1px solid #E4E4E4;
+      padding: 5px 10px;
+      border-radius: 6px;
+      margin-inline-end: 15px;
+      cursor: pointer;
+      transition: .3s;
+      font-family: "Tajawal", sans-serif;
+      font-weight: 500;
+    }
+    
+    input[type="file"]::file-selector-button {
+      background: #FAFAFA;
+      color: #303030;
+      border: 1px solid #E4E4E4;
+      padding: 5px 10px;
+      border-radius: 6px;
+      margin-inline-end: 15px;
+      cursor: pointer;
+      transition: .3s;
+      font-family: "Tajawal", sans-serif;
+      font-weight: 500;
+    }
+
+    input[type="file"]::-webkit-file-upload-button:hover,
+    input[type="file"]::file-selector-button:hover {
+        background: #EFEFEF;
+        border-color: #CFCFCF;
+    }
+
+    /* Style for Current Avatar Preview */
+    .avatar-preview {
+        width: 120px;
+        height: 120px;
+        border-radius: 12px;
+        object-fit: cover;
+        border: 3px solid #56131e;
+        margin-top: 5px; 
+        margin-bottom: 15px; 
+        display: block;
+    }
+
+
+    /* --------------- BUTTON --------------- */
+    .submit-btn {
+        width: 100%;
+        padding: 14px;
+        background: #56131e;
+        color: white;
+        font-size: 15px;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: 0.3s;
+        cursor: pointer;
+        margin-top: 10px; 
+    }
+
+    .submit-btn:hover {
+        background: #3a0d15;
+        transform: translateY(-2px);
+        box-shadow: 0px 10px 20px rgba(74, 14, 30, 0.25);
+    }
+
+    /* --------------- RESPONSIVE --------------- */
+    @media (max-width: 1150px) { /* تعديل نقطة التوقف لتناسب الحجم الجديد */
+        .signup-box { 
+             max-width: 95%;
+        }
+    }
+    
+    @media (max-width: 940px) {
+        .signup-box { 
+            flex-direction: column; 
+            max-width: 90%;
+        }
+
+        .side-image {
+            width: 100%;
+            border-radius: 30px 30px 0 0;
+            min-height: 180px;
+        }
+        
+        .side-image::before {
+             border-radius: 30px 30px 0 0;
+        }
+
+        .form-container { 
+            width: 100%; 
+            padding: 40px 30px;
+        }
+    }
+    
+    @media (max-width: 500px) {
+        .signup-body {
+            padding: 20px 10px;
+        }
+        .form-container { 
+            padding: 30px 20px;
+        }
+        .side-image h1 {
+            font-size: 32px;
+        }
+    }
+</style>
+
 
 <div class="signup-body">
-
     <div class="signup-box">
 
-        <div class="side-image"></div>
+        <div class="side-image">
+            <h1>Update Your Profile</h1>
+        </div>
 
         <div class="form-container">
+            <h2>Your Profile</h2>
+            <p class="desc">Edit your information and save changes.</p>
 
-            <h2>Update Authority Profile</h2>
-            <p class="desc">Fill in the information below to update your authority details.</p>
-
-            <form action="{% url 'account:update_authority_profile' authority_id=authority.id %}" method="POST" enctype="multipart/form-data">
+            <form action="{% url 'account:update_user_profile' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
                 <div class="input-group">
-                    <label>Authority Name</label>
-                    <input type="text" name="name" value="{{ authority.name }}" placeholder="Enter authority name" required>
+                    <label>Email</label>
+                    <input type="email" name="email" value="{{ request.user.email }}" required>
                 </div>
 
                 <div class="input-group">
-                    <label>Description</label>
-                    <textarea name="description" rows="4" placeholder="Tell us about your authority">{{ authority.description }}</textarea>
+                    <label>First Name</label>
+                    <input type="text" name="first_name" value="{{ request.user.first_name }}" required>
                 </div>
-
 
                 <div class="input-group">
-                    <label>Location</label>
-                    <input type="text" name="location" value="{{ authority.location }}" placeholder="Enter location">
+                    <label>Last Name</label>
+                    <input type="text" name="last_name" value="{{ request.user.last_name }}" required>
                 </div>
 
-   <div class="mb-3">
-    <label class="form-label">Authority Logo</label>
+                <div class="input-group">
+                    <label>About Me</label>
+                    <textarea name="about">{{ request.user.profile.about|default_if_none:"" }}</textarea>
+                </div>
 
-    <!-- عرض الشعار الحالي أو المختار -->
-    <div class="mb-2">
-        {% if authority.image %}
-            <img id="logoPreview" src="{{ authority.image.url }}" 
-                 class="rounded-3" 
-                 style="width:120px; height:120px; object-fit:cover; border:3px solid #4A0E2E;">
-        {% else %}
-            <img id="logoPreview" src="" 
-                 class="rounded-3 d-none" 
-                 style="width:120px; height:120px; object-fit:cover; border:3px solid #4A0E2E;">
-        {% endif %}
-    </div>
+                <div class="input-group">
+                    <label>Profile Picture</label>
 
-    <!-- حقل رفع الشعار -->
-    <input class="form-control" type="file" name="image" accept="image/*" id="logoInput">
-</div>
+                    {% if request.user.profile.avatar %}
+                        <img id="avatarPreview" src="{{ request.user.profile.avatar.url }}" class="avatar-preview">
+                    {% else %}
+                        <img id="avatarPreview" src="#" class="avatar-preview" style="display:none;">
+                    {% endif %}
 
+                    <input type="file" name="avatar" id="avatarInput" accept="image/*">
+                </div>
 
-                <button class="submit-btn" type="submit">Update Authority</button>
-
-
-   
-
+                <button class="submit-btn" type="submit">Save Changes</button>
             </form>
-
         </div>
-    </div>
 
+    </div>
 </div>
+
+<script>
+    document.getElementById("avatarInput").addEventListener("change", function () {
+        const file = this.files[0];
+        const preview = document.getElementById("avatarPreview");
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                preview.src = e.target.result;
+                preview.style.display = 'block'; 
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
 
 {% endblock %}

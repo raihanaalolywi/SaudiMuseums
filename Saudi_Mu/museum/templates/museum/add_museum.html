@@ -1,90 +1,282 @@
-
-
-
 {% extends "main/base.html" %}
 {% load static %}
 
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'css/add_authority.css' %}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<div class="authority-container">
+<style>
+/* ======= Background & Page Setup ======= */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #f8f6f2, #e8e4dc);
+    min-height: 100vh;
+}
 
-    {% if messages %}
-    <div class="msg-box">
-        {% for msg in messages %}
-            <p>{{ msg }}</p>
-        {% endfor %}
+.fullpage-form {
+    display: flex;
+    flex-direction: column;
+    padding: 60px 15%;
+    gap: 50px;
+    color: #5e192a;
+    animation: fadeIn 0.7s ease-in-out;
+}
+
+/* ======= Header ======= */
+.form-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.form-header h1 {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: #5e192a;
+}
+
+.form-header p {
+    font-size: 18px;
+    color: #5e192a;
+}
+
+/* ======= Form Body ======= */
+.form-body {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* ======= Form Groups ======= */
+.form-group-custom {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-group-custom label {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+}
+
+.form-group-custom label i {
+    color: #C6A667;
+}
+
+/* Inputs & Selects */
+.form-control-custom, .form-select {
+    padding: 16px 20px;
+    border-radius: 12px;
+    border: 2px solid #e0e0e0;
+    font-size: 15px;
+    background: #ffffff;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-control-custom:focus, .form-select:focus {
+    outline: none;
+    border-color: #5e192a;
+    background: #fff;
+    box-shadow: 0 0 12px rgba(198,166,103,0.3);
+}
+
+/* File Input */
+.file-input-wrapper {
+    position: relative;
+}
+
+.file-input-custom {
+    width: 100%;
+    opacity: 0;
+    height: 50px;
+    cursor: pointer;
+}
+
+.file-input-label {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    border: 2px dashed #C6A667;
+    border-radius: 12px;
+    background: #f8f9fa;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.file-input-label:hover {
+    border-color: #5e192a;
+    color: #7d1845;
+    background: #fff;
+}
+
+/* Time Row */
+.time-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* Google Map Button */
+.google-map-btn {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 10px 15px;
+    background: #5e192a;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.google-map-btn:hover {
+    background: #702a3c;
+}
+
+/* Submit Button */
+.btn-submit-custom {
+    padding: 18px;
+    font-size: 15px;
+    font-weight: 500;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    background: #5e192a; 
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 10px;
+}
+
+.btn-submit-custom:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(74,14,46,0.3);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .fullpage-form { padding: 50px 10%; }
+    .form-header h1 { font-size: 40px; }
+}
+
+@media (max-width: 768px) {
+    .fullpage-form { padding: 40px 5%; }
+    .time-row { grid-template-columns: 1fr; }
+    .form-header h1 { font-size: 32px; }
+    .form-header p { font-size: 16px; }
+}
+</style>
+
+<div class="fullpage-form">
+
+    <!-- Header -->
+    <div class="form-header">
+        <h1>{% if update_mode %} Update Museum {% else %} Add New Museum {% endif %}</h1>
+        <p>{% if update_mode %} Modify museum information {% else %} For Authority: {{ authority.name }} {% endif %}</p>
     </div>
-    {% endif %}
 
-    <!-- العنوان يتغير حسب الوضع -->
-    <h2 class="authority-title">
-        {% if update_mode %}
-            Update Museum
-        {% else %}
-            Add Museum
-        {% endif %}
-    </h2>
+    <!-- Form -->
+    <div class="form-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
 
-    <p class="authority-sub">
-        {% if update_mode %}
-            Modify museum information
-        {% else %}
-            For Authority: {{ authority.name }}
-        {% endif %}
-    </p>
+            <!-- Museum Name -->
+            <div class="form-group-custom">
+                <label><i class="fas fa-building"></i> Museum Name</label>
+                {{ form.name }}
+            </div>
 
-    <form method="POST" enctype="multipart/form-data" class="authority-form">
-        {% csrf_token %}
+            <!-- Location -->
+            <div class="form-group-custom">
+                <label><i class="fas fa-map-marker-alt"></i> Location</label>
+                {{ form.location }}
+            </div>
 
-        <div class="authority-group">
-            <label>Museum Name</label>
-            {{ form.name }}
-        </div>
+            <!-- Description -->
+            <div class="form-group-custom">
+                <label><i class="fas fa-align-left"></i> Description</label>
+                {{ form.description }}
+            </div>
 
-        <div class="authority-group">
-            <label>Location</label>
-            {{ form.location }}
-        </div>
-
-        <div class="authority-group">
-            <label>Description</label>
-            {{ form.description }}
-        </div>
-
-        <div class="authority-group">
-            <label>Museum Image</label>
-            {{ form.image }}
-        </div>
-
-        <div class="authority-group">
-            <label>Open Time</label>
-            {{ form.open_time }}
-        </div>
-
-        <div class="authority-group">
-            <label>Close Time</label>
-            {{ form.close_time }}
-        </div>
-
-        <!-- Google map url -->
-        <div class="authority-group">
-            <label>Google Map URL</label>
-            {{ form.map_url }}
-        </div>
-
-        <!-- زر الإرسال يتغير -->
-        <button class="authority-btn">
-            {% if update_mode %}
-                Update
-            {% else %}
-                Submit
-            {% endif %}
-        </button>
-
-    </form>
+            <!-- Image Upload -->
+<!-- Image Upload -->
+<div class="form-group-custom file-input-wrapper">
+    <label><i class="fas fa-image"></i> Museum Image</label>
+    {{ form.image }}  <!-- هذا يكفي -->
 </div>
 
-{% endblock %}
 
+
+            <!-- Open & Close Time -->
+            <div class="time-row">
+                <div class="form-group-custom">
+                    <label><i class="fas fa-clock"></i> Open Time</label>
+                    {{ form.open_time }}
+                </div>
+                <div class="form-group-custom">
+                    <label><i class="fas fa-clock"></i> Close Time</label>
+                    {{ form.close_time }}
+                </div>
+            </div>
+
+            <!-- Google Map URL -->
+            <div class="form-group-custom">
+                <label><i class="fas fa-map"></i> Google Map URL</label>
+                <input type="url" name="map_url" class="form-control-custom" placeholder="https://www.google.com/maps/..." required>
+                <a id="open-map-btn" class="google-map-btn" href="#" target="_blank" style="display:none;">
+                    Open in Google Maps
+                </a>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn-submit-custom">
+                {% if update_mode %} Update Museum {% else %} Add Museum {% endif %}
+            </button>
+
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add classes to Django fields
+    const inputs = document.querySelectorAll('input:not([type="file"]), textarea, select');
+    inputs.forEach(input => input.classList.add('form-control-custom'));
+
+    // File input custom
+    const fileInput = document.querySelector('input[type="file"]');
+    if (fileInput) fileInput.classList.add('form-control-custom');
+
+    // Google Map Button
+    const mapInput = document.querySelector('input[name="map_url"]');
+    const mapBtn = document.getElementById('open-map-btn');
+    mapInput.addEventListener('input', function() {
+        const url = this.value.trim();
+        if (url.startsWith('http')) {
+            mapBtn.href = url;
+            mapBtn.style.display = 'inline-block';
+        } else {
+            mapBtn.style.display = 'none';
+        }
+    });
+});
+</script>
+
+{% endblock %}

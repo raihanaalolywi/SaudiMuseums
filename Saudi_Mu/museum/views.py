@@ -22,22 +22,17 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from .models import Museum, Booking
 
-
-
-@login_required(login_url='account:sign_in')  # تأكد من تسجيل الدخول
-# إضافة هيئة جديدة
+@login_required(login_url='account:sign_in')
 def add_authority(request):
-
-    if not request.user.is_staff:  # ممكن تغير الشرط حسب مشروعك
-        return redirect('home')  # ارجاعه للصفحة الرئيسية
-
+    # فقط المستخدمين الذين سجلوا كهيئة يمكنهم إضافة الهيئة
+    profile = getattr(request.user, 'profile', None)
+    if not profile:
+        messages.error(request, "يرجى إنشاء حساب أولاً.")
+        return redirect('account:sign_up')
 
     if request.method == "POST":
         form = AuthorityForm(request.POST, request.FILES)
-
         if form.is_valid():
-
-            #  هذا هو الشرط الجديد لمنع تكرار نوع الهيئة فقط
             selected_type = form.cleaned_data["type"]
             if Authority.objects.filter(type=selected_type).exists():
                 messages.error(request, "هذا النوع من الهيئات مستخدم مسبقًا ولا يمكن إضافته مرة أخرى.")
@@ -48,7 +43,8 @@ def add_authority(request):
             authority.save()
 
             messages.success(request, "تم إضافة الهيئة بنجاح")
-            return redirect('add_museum', authority_id=authority.id)
+            # بعد إضافة الهيئة، إعادة التوجيه مباشرة لبروفايل الهيئة
+            return redirect('account:authority_profile', authority_id=authority.id)
 
     else:
         form = AuthorityForm()
@@ -102,17 +98,18 @@ def update_authority(request, authority_id):
     })
 
 
-# حذف هيئة
 @login_required(login_url='account:sign_in')
 def delete_authority(request, authority_id):
 
-    
-    # تحقق إذا المستخدم هو المالك أو أدمن
+    # أول شيء نجيب الهيئة
+    authority = get_object_or_404(Authority, id=authority_id)
+
+    # بعدها نسوي التحقق
     if request.user != authority.owner and not request.user.is_staff:
         messages.error(request, "ليس لديك صلاحية حذف هذه الهيئة")
-        return redirect('home')  # ارجاع للصفحة الرئيسية
-    
-    authority = get_object_or_404(Authority, id=authority_id)
+        return redirect('home')
+
+    # بعدها نحذف
     authority.delete()
     messages.success(request, "تم حذف الهيئة بنجاح")
     return redirect('all_authority')
@@ -329,7 +326,6 @@ def add_museum_bookmark(request, museum_id):
 
 
 
-@login_required
 def booking(request):
     authorities = Authority.objects.all()
     museums = Museum.objects.all()

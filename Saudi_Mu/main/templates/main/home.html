@@ -5,138 +5,740 @@
 
 {% block content %}
 
-<!-- Libraries -->
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
 
-<!-- ========================= HERO ========================= -->
+<style>
+/*
+======================================
+** General Settings (LTR) **
+======================================
+*/
+body {
+    /* Set direction to Left-to-Right */
+    font-family: 'Arial', sans-serif !important;
+    direction: ltr; 
+    text-align: left;
+}
+
+/*
+======================================
+** Hero Section **
+======================================
+*/
+.hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* الصورة الأساسية للخلفية */
+    background: url("{% static 'image/main.jpg' %}") center/cover no-repeat;
+    /* التأكد من أن المحتوى الداخلي (النص) له قيمة z-index أعلى من الـ overlay */
+    z-index: 1; 
+}
+
+/* إضافة الطبقة الشفافة */
+.hero::before {
+    content: ''; /* يجب أن يكون موجودًا للعناصر الزائفة */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* اللون الأسود الشفاف (RGBA: Red, Green, Blue, Alpha(شفافية)) */
+    background: rgba(0, 0, 0, 0.596); /* 0.25 تعني شفافية 25% */
+    /* يجب أن تكون الطبقة تحت المحتوى النصي */
+    z-index: 2; 
+}
+
+/* التأكد من أن محتوى النص أعلى من الطبقة الشفافة */
+.hero-content {
+    position: relative; /* ضروري لكي يعمل z-index */
+    z-index: 3; /* أعلى من الطبقة الشفافة (z-index: 2) */
+    text-align: left;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+    max-width: 800px;
+    padding: 0 20px;
+}
+
+.hero-title {
+    font-size: 60px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.hero-subtitle {
+    font-size: 22px;
+    margin-bottom: 40px;
+    opacity: 0.95;
+    font-weight: 300;
+}
+
+.search-box {
+    max-width: 650px;
+    margin: 2rem auto 0;
+    display: flex;
+    flex-direction: row; 
+    gap: 10px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    border-radius: 50px;
+    overflow: hidden;
+    background: white;
+    padding: 6px;
+}
+
+.search-box input {
+    flex: 1;
+    border: none;
+    padding: 14px 24px;
+    font-size: 15px;
+    outline: none;
+    background: transparent;
+    font-family: "Arial", sans-serif;
+    text-align: left;
+}
+
+.search-box button {
+    background: #5e192a;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 50px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    min-width: 60px;
+}
+
+.search-box button:hover {
+    background: #583a3a;
+    transform: scale(1.05);
+}
+
+.scroll-down {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 24px;
+    animation: bounce 2s infinite;
+    cursor: pointer;
+    z-index: 2;
+}
+
+@keyframes bounce {
+    0%, 100% { 
+        transform: translateX(-50%) translateY(0); 
+    }
+    50% { 
+        transform: translateX(-50%) translateY(10px); 
+    }
+}
+
+/*
+======================================
+** Sections & Headers **
+======================================
+*/
+.section {
+    padding: 100px 20px;
+}
+
+.section-head {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-head h2 {
+    font-size: 42px;
+    font-weight: 800;
+    color: #2C2C2C;
+    position: relative;
+    padding-bottom: 15px;
+    margin-bottom: 12px;
+}
+
+.section-head h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%; /* Centered underline */
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background-color: #4f3435; 
+    border-radius: 2px;
+}
+
+.section-head p {
+    font-size: 17px;
+    color: #555;
+}
+
+/* ===== Authority Cards ===== */
+.authority-card {
+    display: block;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+    border: none;
+    background: white;
+}
+
+.authority-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 50px rgba(91, 75, 107, 0.15);
+}
+
+.card-img {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.authority-card:hover .card-img img {
+    transform: scale(1.1);
+}
+
+.img-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(107, 75, 80, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+
+.authority-card:hover .img-overlay {
+    opacity: 1;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-body h3 {
+    color: #5e192a;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.card-body p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 18px;
+}
+
+.btn-main {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    background: #5e192a;
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    border: none;
+}
+
+.btn-main:hover {
+    background: #583a3a;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(91, 75, 107, 0.3);
+    color: white;
+}
+.btn-main i {
+    margin-right: -2px;
+}
+
+
+/* ===== Intro Section ===== */
+.intro {
+    padding: 80px 20px;
+    background: #F8F8F8;
+}
+
+.intro-title {
+    font-size: 40px;
+    font-weight: 800;
+    color: #2C2C2C;
+    margin-bottom: 20px;
+    line-height: 1.3;
+    /* Vertical line on the left for LTR */
+    border-left: 4px solid #6b4b4b; 
+    padding-left: 15px;
+}
+
+.intro-text {
+    font-size: 17px;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 25px;
+}
+
+.intro-img {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+}
+
+.intro-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.intro-img:hover img {
+    transform: scale(1.05);
+}
+
+/* ===== Stats Section ===== */
+.stats-section {
+    padding: 120px 20px;
+    background: linear-gradient(rgba(56, 25, 25, 0.7), rgba(107, 75, 75, 0.7)), url("{% static 'image/stats-bg.jpg' %}") center/cover no-repeat;
+    position: relative;
+    overflow: hidden;
+}
+
+.stats-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.stats-grid {
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    text-align: center;
+    transition: transform 0.4s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-15px);
+}
+
+.stat-circle {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    border: 3px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin: 0 auto 25px;
+    position: relative;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3), inset 0 0 30px rgba(255, 255, 255, 0.1);
+    transition: all 0.4s ease;
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+}
+
+.stat-circle h3 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin: 0;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.stat-label {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/*
+======================================
+** Museum Carousel (3 Items per Slide) **
+======================================
+/* قسم المتاحف فقط */
+.museum-carousel-section .carousel {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 20px 0;
+}
+
+.museum-carousel-section .carousel-btn {
+    display: none; /* يخفي جميع أزرار prev و next */
+}
+
+.museum-carousel-section .museum-card {
+    flex: 0 0 350px; /* حجم ثابت لكل بطاقة */
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    height: 350px;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.museum-carousel-section .museum-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* الصورة تغطي كامل الكارد */
+.museum-carousel-section .museum-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease, filter 0.5s ease;
+}
+
+.museum-carousel-section .museum-card:hover img {
+    transform: scale(1.08);
+}
+
+/* Overlay تدرج من الأسفل */
+.museum-carousel-section .museum-card::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 50%; /* يغطي نصف الكارد من الأسفل */
+    background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* النص فوق التدرج */
+.museum-carousel-section .museum-card .card-body {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    z-index: 2; /* فوق التدرج */
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.museum-carousel-section .museum-card .card-body h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.museum-carousel-section .museum-card .card-body p {
+    margin: 0;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    color: #f0f0f0;
+}
+
+.museum-carousel-section .museum-card .card-body p i {
+    margin-right: 8px;
+    color: #5e192a;
+}
+
+.museum-carousel-section .museum-card .btn-main {
+    align-self: flex-start;
+    padding: 8px 20px;
+    background: #5e192a;
+    color: #ffffff;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.museum-carousel-section .museum-card .btn-main:hover {
+    background: #fff;
+    color: #5C3317;
+    transform: translateY(-2px);
+}
+
+/* ===== CTA Section ===== */
+.cta {
+    padding: 90px 20px;
+    background: linear-gradient(135deg, #412626, #4d2f2f);
+}
+
+.cta-box {
+    text-align: center;
+    color: white;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.cta-box h2 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.cta-box p {
+    font-size: 18px;
+    margin-bottom: 30px;
+    opacity: 0.95;
+}
+
+.btn-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 35px;
+    background: white;
+    color: #5e192a;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.btn-cta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+    color: #6b4b4b;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 992px) {
+    .museum-card {
+        /* Show 2 cards on tablet */
+        width: calc((100% - 20px) / 2);
+    }
+    
+    .hero-title {
+        font-size: 40px;
+    }
+    
+    .intro-title,
+    .section-head h2,
+    .cta-box h2 {
+        font-size: 32px;
+    }
+    
+    .stats-grid {
+        gap: 60px;
+    }
+    
+    .intro .row {
+        /* Ensure columns stack logically in LTR */
+        flex-direction: row; 
+    }
+}
+
+@media (max-width: 600px) {
+    .museum-card {
+        /* Show 1 card on mobile */
+        width: 100%;
+    }
+    
+    .hero-title {
+        font-size: 32px;
+    }
+    
+    .search-box {
+        flex-direction: column;
+        border-radius: 15px;
+        padding: 10px;
+    }
+    
+    .search-box button {
+        width: 100%;
+        border-radius: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .stat-circle {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .stat-circle h3 {
+        font-size: 2.5rem;
+    }
+}
+</style>
+
 <section class="hero">
     <div class="hero-overlay"></div>
-
     <div class="hero-content" data-aos="fade-up">
-        <h1 class="hero-title">Discover Saudi Arabia’s Cultural Treasures</h1>
+        <h1 class="hero-title">Discover Saudi Arabia's Cultural Treasures</h1>
         <p class="hero-subtitle">Explore museums, authorities, and heritage destinations across the Kingdom</p>
-
         <form class="search-box" action="{% url 'search' %}" method="GET">
             <input type="text" name="q" placeholder="Search for museums, authorities..." required>
             <button type="submit"><i class="fas fa-search"></i></button>
         </form>
     </div>
-
     <div class="scroll-down" data-aos="fade-up" data-aos-delay="300">
         <i class="fas fa-chevron-down"></i>
     </div>
 </section>
 
-
-
-<!-- ========================= AUTHORITIES ========================= -->
 <section class="section">
     <div class="container">
-
         <div class="section-head" data-aos="fade-up">
             <h2>Featured Authorities</h2>
             <p>Discover the leading cultural institutions across Saudi Arabia</p>
         </div>
-
         <div class="row g-4">
             {% for a in authorities %}
             <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
-                <div class="card authority-card">
-
+                <a href="{% url 'details' a.id %}" class="authority-card text-decoration-none">
                     <div class="card-img">
                         {% if a.image %}
-                            <img src="{{ a.image.url }}" alt="">
+                            <img src="{{ a.image.url }}" alt="{{ a.name }}">
                         {% else %}
-                            <img src="{% static 'image/default_authority.jpg' %}" alt="">
+                            <img src="{% static 'image/default_authority.jpg' %}" alt="{{ a.name }}">
                         {% endif %}
                         <div class="img-overlay">View Details</div>
                     </div>
-
                     <div class="card-body">
                         <h3>{{ a.name }}</h3>
                         <p>{{ a.description|truncatewords:15 }}</p>
-                        <a class="btn-main" href="{% url 'details' a.id %}">
-                            Explore <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
+                        <span class="btn-main">
+                            Explore <i class="fas fa-arrow-right"></i>
+                        </span>
                     </div>
-
-                </div>
+                </a>
             </div>
             {% endfor %}
         </div>
-
     </div>
 </section>
 
+<section class="stats-section">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card" data-aos="zoom-in" data-aos-delay="100">
+                <div class="stat-circle">
+                    <i class="fas fa-landmark stat-icon"></i>
+                    <h3 id="stat1">0</h3>
+                </div>
+                <p class="stat-label">Museums</p>
+            </div>
+            <div class="stat-card" data-aos="zoom-in" data-aos-delay="300">
+                <div class="stat-circle">
+                    <i class="fas fa-users stat-icon"></i>
+                    <h3 id="stat2">0</h3>
+                </div>
+                <p class="stat-label">Visitors</p>
+            </div>
+            <div class="stat-card" data-aos="zoom-in" data-aos-delay="500">
+                <div class="stat-circle">
+                    <i class="fas fa-city stat-icon"></i>
+                    <h3 id="stat3">0</h3>
+                </div>
+                <p class="stat-label">Cities</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-
-<!-- ========================= INTRO ========================= -->
 <section class="intro">
     <div class="container">
         <div class="row align-items-center g-5">
-
             <div class="col-lg-6" data-aos="fade-right">
                 <h2 class="intro-title">A Journey Through Saudi History & Culture</h2>
                 <p class="intro-text">
-                    Explore museums and cultural hubs that highlight Saudi Arabia’s rich heritage. 
+                    Explore museums and cultural hubs that highlight Saudi Arabia's rich heritage. 
                     Dive into unique stories, artifacts, and experiences that bring the past to life.
                 </p>
-
-                <div class="stats">
-                    <div class="stat"><h3>50+</h3><p>Museums</p></div>
-                    <div class="stat"><h3>100K+</h3><p>Visitors</p></div>
-                    <div class="stat"><h3>15+</h3><p>Cities</p></div>
-                </div>
             </div>
-
             <div class="col-lg-6" data-aos="fade-left">
                 <div class="intro-img">
-                    <img src="{% static 'image/pho.jpg' %}" alt="">
+                    <img src="{% static 'image/pho.jpg' %}" alt="Saudi Heritage">
                 </div>
             </div>
-
         </div>
     </div>
 </section>
 
-
-
-<!-- ========================= MUSEUMS ========================= -->
 <section class="section museum-carousel-section">
-  <div class="container">
-    <div class="section-head" data-aos="fade-up">
-      <h2>Latest Museums</h2>
-      <p>Explore the newest cultural destinations across the Kingdom</p>
-    </div>
-
-    <div class="carousel-wrapper">
-      <button class="carousel-btn prev">&lt;</button>
-      <div class="carousel">
-        {% for m in museums %}
-        <div class="museum-card {% if forloop.counter0 == 0 %}active{% endif %}">
-          <div class="museum-img">
-            <img src="{{ m.image.url }}" alt="{{ m.name }}">
-            <span class="new-badge">New</span>
-          </div>
-          <div class="card-body">
-            <h3>{{ m.name }}</h3>
-            <p><i class="fas fa-map-marker-alt"></i> {{ m.location }}</p>
-            <a href="#" class="btn-main">Visit Museum <i class="fas fa-arrow-right"></i></a>
-          </div>
+    <div class="container">
+        <div class="section-head" data-aos="fade-up">
+            <h2>Latest Museums</h2>
+            <p>Explore the newest cultural destinations across the Kingdom</p>
         </div>
-        {% endfor %}
-      </div>
-      <button class="carousel-btn next">&gt;</button>
+        <div class="carousel-wrapper" data-aos="fade-up" data-aos-delay="200">
+            <button class="carousel-btn prev" disabled><i class="fas fa-chevron-left"></i></button>
+            <div class="carousel">
+                {% for m in museums %}
+                <div class="museum-card">
+                    <div class="museum-img">
+                        <img src="{{ m.image.url }}" alt="{{ m.name }}">
+                    </div>
+                    <div class="card-body">
+                        <h3>{{ m.name }}</h3>
+                        <p><i class="fas fa-map-marker-alt me-2"></i> {{ m.location }}</p>
+                        <a href="{% url 'booking' %}" class="btn-main">
+                            Visit Museum <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-btn next"><i class="fas fa-chevron-right"></i></button>
+        </div>
     </div>
-  </div>
 </section>
 
-
-
-
-<!-- ========================= CTA ========================= -->
 <section class="cta" data-aos="fade-up">
     <div class="container">
         <div class="cta-box">
@@ -149,49 +751,161 @@
     </div>
 </section>
 
-
-
-<!-- ========================= SCRIPTS ========================= -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.6.2/countUp.umd.min.js"></script>
+
 <script>
-    AOS.init({
-        duration: 1000,
-        once: true,
-        offset: 120
+// Initialize AOS Animation Library
+AOS.init({
+    duration: 1000,
+    once: true,
+    offset: 120
+});
+
+// Stats Counter Animation
+window.addEventListener('load', () => {
+    const counterOptions = {
+        duration: 2.5,
+        separator: ',',
+        useEasing: true
+    };
+    
+    // Target values
+    const target1 = 50;
+    const target3 = 15;
+    const target2 = 10000;
+    
+    const counter1 = new countUp.CountUp('stat1', target1, counterOptions);
+    const counter3 = new countUp.CountUp('stat3', target3, counterOptions);
+    
+    const formatNumber = (num) => {
+        if (num >= 1000) {
+            return (num / 1000).toFixed(0) + 'k';
+        }
+        return num.toString();
+    };
+    
+    const statsObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                counter1.start();
+                counter3.start();
+                
+                // Animate stat2 (Visitors)
+                let current = 0;
+                const duration = 2500;
+                const increment = target2 / (duration / 16);
+                
+                const animateStat2 = () => {
+                    current += increment;
+                    if (current < target2) {
+                        document.getElementById('stat2').textContent = formatNumber(Math.floor(current));
+                        requestAnimationFrame(animateStat2);
+                    } else {
+                        document.getElementById('stat2').textContent = '10k+';
+                    }
+                };
+                animateStat2();
+                
+                statsObserver.disconnect();
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    statsObserver.observe(document.querySelector('.stats-section'));
+});
+
+// Museum Carousel Functionality (3 items per slide, steps one by one)
+document.addEventListener('DOMContentLoaded', () => {
+    const carousel = document.querySelector('.carousel');
+    const cards = Array.from(document.querySelectorAll('.museum-card'));
+    const nextBtn = document.querySelector('.carousel-btn.next');
+    const prevBtn = document.querySelector('.carousel-btn.prev');
+
+    if (!carousel || cards.length === 0 || !nextBtn || !prevBtn) return;
+
+    let currentIndex = 0; 
+    
+    // Determine how many items are visible (1, 2, or 3)
+    function getVisibleItemsCount() {
+        const width = window.innerWidth;
+        if (width <= 600) return 1;
+        if (width <= 992) return 2;
+        return 3;
+    }
+
+    function getGap() {
+        // Gets the gap value defined in CSS
+        const gapStr = window.getComputedStyle(carousel).getPropertyValue('gap');
+        return gapStr ? parseFloat(gapStr) : 20;
+    }
+
+    function getCardWidth() {
+        // Card width + gap size
+        return cards[0] ? cards[0].offsetWidth + getGap() : 0;
+    }
+
+    function updateCarousel() {
+        const cardWidth = getCardWidth();
+        const visibleCount = getVisibleItemsCount();
+        
+        // Calculate the maximum index for the last full slide
+        const maxIndex = cards.length - visibleCount;
+
+        // Clamp the index within boundaries
+        if (currentIndex < 0) currentIndex = 0;
+        if (currentIndex > maxIndex) currentIndex = maxIndex;
+
+        // If not enough cards for a full slide
+        if (maxIndex < 0) {
+            carousel.style.transform = `translateX(0px)`;
+            prevBtn.disabled = true;
+            nextBtn.disabled = true;
+            prevBtn.style.opacity = '0.5';
+            nextBtn.style.opacity = '0.5';
+            return;
+        }
+
+        // LTR: Negative offset moves the content to the left (shows next cards)
+        const offset = -(currentIndex * cardWidth);
+
+        carousel.style.transform = `translateX(${offset}px)`;
+        
+        // Update button states
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex >= maxIndex;
+        
+        prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
+        nextBtn.style.opacity = currentIndex >= maxIndex ? '0.5' : '1';
+    }
+
+    // Previous button (Moves right)
+    prevBtn.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex -= 1; // Move back one card at a time
+            updateCarousel();
+        }
     });
-</script>
-<!-- نهاية السكشن والصفحة -->
-<script>
-const carousel = document.querySelector('.carousel');
-const cards = document.querySelectorAll('.museum-card');
-const nextBtn = document.querySelector('.carousel-btn.next');
-const prevBtn = document.querySelector('.carousel-btn.prev');
 
-let currentIndex = 0;
+    // Next button (Moves left)
+    nextBtn.addEventListener('click', () => {
+        const visibleCount = getVisibleItemsCount();
+        const maxIndex = cards.length - visibleCount;
+        if (currentIndex < maxIndex) {
+            currentIndex += 1; // Move forward one card at a time
+            updateCarousel();
+        }
+    });
 
-function updateCarousel() {
-  cards.forEach((card, i) => {
-    card.classList.remove('active');
-  });
-  cards[currentIndex].classList.add('active');
+    window.addEventListener('resize', () => {
+        // Recalculate and reset index on resize
+        currentIndex = 0; 
+        requestAnimationFrame(updateCarousel);
+    });
 
-  const offset = -currentIndex * (cards[0].offsetWidth + 20) + (carousel.parentElement.offsetWidth/2 - cards[0].offsetWidth/2);
-  carousel.style.transform = `translateX(${offset}px)`;
-}
-
-nextBtn.addEventListener('click', () => {
-  if(currentIndex < cards.length - 1) currentIndex++;
-  updateCarousel();
+    updateCarousel(); // Initialize on load
 });
-
-prevBtn.addEventListener('click', () => {
-  if(currentIndex > 0) currentIndex--;
-  updateCarousel();
-});
-
-updateCarousel();
 </script>
-
 
 {% endblock %}

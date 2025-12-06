@@ -5,46 +5,176 @@
 
 {% block content %}
 
-<!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<!-- Custom Booking CSS -->
-<link rel="stylesheet" href="{% static 'css/booking.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<div class="booking-box">
-    <!-- Video as background -->
+<style>
+/* الصفحة كلها */
+body {
+    background-color: #f8f6f2;
+    margin: 0;
+    padding: 0;
+}
+
+/* البطاقة */
+.booking-card {
+    max-width: 800px;
+    margin: 150px auto 4rem auto; /* بدل -80px خلي 150px لفصل عن الفيديو */
+    background: white;
+    border-radius: 25px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+    overflow: hidden;
+    position: relative; /* تأكد انه موجود */
+    z-index: 1;
+}
+
+/* الفيديو في الأعلى */
+.booking-video-wrapper {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+}
+
+.booking-video-wrapper video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.5);
+}
+
+.booking-header {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+    z-index: 2;
+}
+
+.booking-header h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.booking-header p {
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* جسم النموذج */
+.booking-body {
+    padding: 45px;
+}
+
+/* الفورم جروب */
+.form-group-custom {
+    margin-bottom: 25px;
+}
+
+.form-label-custom {
+    font-weight: 600;
+    font-size: 15px;
+    color: #4A0E2E;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-label-custom i {
+    color: #C6A667;
+    font-size: 18px;
+}
+
+/* Inputs */
+.form-control-custom, .form-select {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 15px;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.form-control-custom:focus, .form-select:focus {
+    border-color: #C6A667;
+    box-shadow: 0 0 0 4px rgba(198, 166, 103, 0.1);
+    background: white;
+    outline: none;
+}
+
+/* Row للوقت والتاريخ */
+.time-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* زر الإرسال */
+.btn-submit-custom {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #4A0E2E 0%, #7d1845 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.btn-submit-custom:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(74, 14, 46, 0.4);
+}
+
+@media (max-width:768px){
+    .time-row { grid-template-columns: 1fr; }
+    .booking-body { padding: 30px 20px; }
+    .booking-header h2 { font-size: 1.5rem; }
+    .booking-header p { font-size: 0.9rem; }
+}
+</style>
+
+<div class="booking-card">
     <div class="booking-video-wrapper">
         <video class="booking-video" autoplay muted loop>
             <source src="{% static 'videos/museumv.mp4' %}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
 
-        <!-- Header over video -->
         <div class="booking-header">
             <h2>Book Your Museum Visit</h2>
             <p>Fill in your details and select a convenient date for your visit</p>
         </div>
     </div>
 
-    <!-- Body / Form -->
     <div class="booking-body">
         <form method="POST" action="{% url 'booking' %}">
             {% csrf_token %}
 
-            <div class="form-group">
-                <label for="name" class="form-label">Full Name</label>
-                <input type="text" class="form-control" id="name" name="name"
+            <div class="form-group-custom">
+                <label class="form-label-custom"><i class="fas fa-user"></i> Full Name</label>
+                <input type="text" class="form-control-custom" name="name"
                        value="{{ request.user.first_name }} {{ request.user.last_name }}" readonly>
             </div>
 
-            <div class="form-group">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="email"
+            <div class="form-group-custom">
+                <label class="form-label-custom"><i class="fas fa-envelope"></i> Email</label>
+                <input type="email" class="form-control-custom" name="email"
                        value="{{ request.user.email }}" readonly>
             </div>
 
-            <div class="form-group">
-                <label for="authority" class="form-label">Select Authority</label>
-                <select name="authority" id="authority" class="form-select" required>
+            <div class="form-group-custom">
+                <label class="form-label-custom"><i class="fas fa-landmark"></i> Select Authority</label>
+                <select name="authority" class="form-control-custom" required>
                     <option value="">-- Select Authority --</option>
                     {% for authority in authorities %}
                         <option value="{{ authority.id }}">{{ authority.name }}</option>
@@ -52,9 +182,9 @@
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="museum" class="form-label">Select Museum</label>
-                <select name="museum" id="museum" class="form-select" required>
+            <div class="form-group-custom">
+                <label class="form-label-custom"><i class="fas fa-university"></i> Select Museum</label>
+                <select name="museum" class="form-control-custom" required>
                     <option value="">-- Select Museum --</option>
                     {% for museum in museums %}
                         <option value="{{ museum.id }}">{{ museum.name }}</option>
@@ -62,17 +192,18 @@
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="date" class="form-label">Date</label>
-                <input type="date" class="form-control" name="date" id="date" required>
+            <div class="time-row">
+                <div class="form-group-custom">
+                    <label class="form-label-custom"><i class="fas fa-calendar-alt"></i> Date</label>
+                    <input type="date" class="form-control-custom" name="date" required>
+                </div>
+                <div class="form-group-custom">
+                    <label class="form-label-custom"><i class="fas fa-clock"></i> Time</label>
+                    <input type="time" class="form-control-custom" name="time" required>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="time" class="form-label">Time</label>
-                <input type="time" class="form-control" name="time" id="time" required>
-            </div>
-
-            <button type="submit" class="btn-submit">Confirm Booking</button>
+            <button type="submit" class="btn-submit-custom">Confirm Booking</button>
         </form>
     </div>
 </div>

@@ -1,263 +1,83 @@
 :root {
-    --bg: #3C0D29;
-    --gold: #C6A667;
-    --beige: #EEE2CC;
+    --bg: #f1efe9 !important;      /* لون الهيدر والفوتر */
+    --gold: #4a0d24 !important;    /* لون النص */
+    --beige: #EEE2CC;              /* لون الخلفية */
 }
-
 /* BODY */
 body {
     background: var(--beige);
     margin: 0;
     font-family: "Poppins", sans-serif;
-    
 }
-
-/* NAVBAR */
+/* ================= NAVBAR ================= */
 .base-navbar {
-    background: #3C0D29;
-    padding: 15px 40px;
+    background: var(--bg) !important;
+    padding: 9px 15px;  /* نحذف padding الرأسي */
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 4px solid var(--gold);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    border-bottom: 3px solid var(--gold);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     position: sticky;
     top: 0;
     z-index: 999;
     direction: ltr;
+
+    height: 60px;       /* ارتفاع ثابت للهيدر */
+    min-height: 50px;   /* حتى لو اختفى عنصر */
 }
-
-/* ------------- توزيع احترافي ---------------- */
-
-/* الآن نبدل بين اليسار واليمين */
-.base-left {
-    order: 1; /* Saudi Museum */
-    margin-left: 20px;
-}
-
-.base-center {
-    order: 2;
-    display: flex;
-    justify-content: center;
-    flex: 1;
-    gap: 25px;
-}
-
-.base-right {
-    order: 3; /* Icons */
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-right: 20px;
-}
-
-/* ----------- LOGO ----------- */
-.base-logo {
-    color: var(--gold);
-    font-size: 28px;
-    font-weight: 700;
-}
-
-/* ---------- LINKS ---------- */
-.base-center a {
-    text-decoration: none;
-    font-size: 17px;
-    color: var(--gold);
-    font-weight: 500;
-    transition: 0.3s;
-}
-
-.base-center a:hover {
-    color: #ffffff;
-    text-shadow: 0 0 5px rgba(255,255,255,0.7);
-}
-
-/* ----------- ICONS ---------- */
-.icon-btn {
-    padding: 10px;
-    border: 2px solid var(--gold);
-    border-radius: 12px;
-    background: var(--bg);
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.icon-btn svg {
-    stroke: var(--gold);
-    stroke-width: 2;
-    fill: none;
-}
-
-.icon-btn:hover {
-    background: var(--gold);
-    transform: scale(1.12);
-}
-
-.icon-btn:hover svg {
-    stroke: var(--bg);
-}
-
-/* -------- Responsive -------- */
-@media(max-width: 800px){
-    .base-center {
-        display: none;
-    }
-}
-
-@media(max-width: 500px){
-    .base-logo {
-        font-size: 22px;
-    }
-}
-
-
-
-
-/* Profile Link header*/
-.profile-link {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-    padding: 5px 10px;
-    border-radius: 8px;
-    transition: background-color 0.3s;
-}
-
-.profile-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Avatar - الأهم! */
-.nav-avatar {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-    min-height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #f2efe6;
-    display: block;
-}
-
-/* Username */
-.nav-username {
-    font-weight: 500;
-    font-size: 16px;
-    color: #f4c27f;
-    white-space: nowrap;
-}
-
-/* Icon Button */
-.icon-btn {
-    padding: 5px;
-    color: #f4c27f;
-    display: inline-flex;
-    align-items: center;
-    text-decoration: none;
-}
-
-
-
-
-/* ============================================
-   Google Translate Bar - Hide Completely
-   ============================================ */
-/* ============================================
-   CSS Variables
-   ============================================ */
-:root {
-    --bg: #3C0D29;
-    --gold: #C6A667;
-    --beige: #EEE2CC;
-}
-
-/* ============================================
-   Body Styles
-   ============================================ */
-body {
-    background: var(--beige);
-    margin: 0;
-    font-family: "Poppins", sans-serif;
-    top: 0 !important;
-}
-
-/* ============================================
-   Navbar Styles
-   ============================================ */
-.base-navbar {
-    background: #3C0D29;
-    padding: 15px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 4px solid var(--gold);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    position: sticky;
-    top: 0;
-    z-index: 999;
-    direction: ltr;
-}
-
-/* Left Section */
+/* Sections */
 .base-left {
     order: 1;
-    margin-left: 20px;
+    margin-left: 10px;
 }
 
-/* Center Section */
 .base-center {
     order: 2;
     display: flex;
     justify-content: center;
     flex: 1;
-    gap: 25px;
+    gap: 15px;
 }
 
-/* Right Section */
 .base-right {
     order: 3;
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-right: 20px;
+    gap: 10px;
+    margin-right: 10px;
 }
 
-/* ============================================
-   Logo Styles
-   ============================================ */
+/* Logo */
 .base-logo {
     color: var(--gold);
-    font-size: 28px;
     font-weight: 700;
+    font-size: 18px;  /* أصغر الشعار */
 }
 
-/* ============================================
-   Navigation Links
-   ============================================ */
+/* Navigation Links */
 .base-center a {
     text-decoration: none;
-    font-size: 17px;
+    font-size: 14px;  /* أصغر روابط الهيدر */
     color: var(--gold);
     font-weight: 500;
+    padding: 2px 5px;
     transition: 0.3s;
 }
 
 .base-center a:hover {
-    color: #ffffff;
+    color: #4b4041;
     text-shadow: 0 0 5px rgba(255,255,255,0.7);
 }
 
-/* ============================================
-   Profile Section
-   ============================================ */
+/* Profile Link */
 .profile-link {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
     text-decoration: none;
-    padding: 5px 10px;
-    border-radius: 8px;
+    padding: 2px 5px;
+    border-radius: 6px;
     transition: background-color 0.3s;
 }
 
@@ -266,10 +86,10 @@ body {
 }
 
 .nav-avatar {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-    min-height: 40px;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #f2efe6;
@@ -278,27 +98,22 @@ body {
 
 .nav-username {
     font-weight: 500;
-    font-size: 16px;
-    color: #f4c27f;
-    white-space: nowrap;
+    font-size: 13px;
 }
 
-/* ============================================
-   Icon Buttons (Unified Style)
-   ============================================ */
+/* Icon Buttons */
 .icon-btn {
-    padding: 8px 12px;
-    color: #f4c27f;
-    background: none;
-    border: 2px solid var(--gold);
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    text-decoration: none;
+    padding: 4px 6px;
+    color: var(--gold);
     display: inline-flex;
     align-items: center;
-    margin-left: 0.5rem;
+    text-decoration: none;
+    border: 2px solid var(--gold);
+    border-radius: 8px;
+    background: var(--bg);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .icon-btn:hover {
@@ -318,9 +133,7 @@ body {
     stroke: var(--bg);
 }
 
-/* ============================================
-   Language Dropdown
-   ============================================ */
+/* Dropdown Language */
 .dropdown {
     position: relative;
     display: inline-block;
@@ -343,11 +156,10 @@ body {
     width: 100%;
     border: none;
     background: none;
-    padding: 12px 16px;
+    padding: 10px 12px;
     cursor: pointer;
     text-align: left;
-    font-size: 0.95rem;
-    transition: background-color 0.2s ease;
+    font-size: 0.9rem;
     color: #333;
     font-family: "Poppins", sans-serif;
 }
@@ -365,7 +177,7 @@ body {
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(-10px);
+        transform: translateY(-5px);
     }
     to {
         opacity: 1;
@@ -373,32 +185,12 @@ body {
     }
 }
 
-/* ============================================
-   Google Translate - Hide Banner
-   ============================================ */
-.goog-te-banner-frame {
+/* Hide Google Translate Banner */
+.goog-te-banner-frame, .skiptranslate, body > .skiptranslate, iframe.skiptranslate, .goog-te-banner-frame.skiptranslate {
     display: none !important;
 }
 
-.skiptranslate {
-    display: none !important;
-}
-
-body > .skiptranslate {
-    display: none !important;
-}
-
-iframe.skiptranslate {
-    display: none !important;
-}
-
-.goog-te-banner-frame.skiptranslate {
-    display: none !important;
-}
-
-/* ============================================
-   Responsive Design
-   ============================================ */
+/* Responsive */
 @media(max-width: 800px) {
     .base-center {
         display: none;
@@ -407,20 +199,20 @@ iframe.skiptranslate {
 
 @media(max-width: 500px) {
     .base-logo {
-        font-size: 22px;
+        font-size: 16px;
     }
     
     .base-navbar {
-        padding: 12px 20px;
+        padding: 4px 10px;
     }
     
     .base-left {
-        margin-left: 10px;
+        margin-left: 5px;
     }
     
     .base-right {
-        margin-right: 10px;
-        gap: 10px;
+        margin-right: 5px;
+        gap: 5px;
     }
     
     .nav-username {
@@ -428,24 +220,12 @@ iframe.skiptranslate {
     }
 }
 
-
-
-
-
-
-
-
-
-/*Footer*/
 /* ================= FOOTER ================= */
-
 .footer {
-
-    background: #3C0D29;
-    color: #C6A667;
-
-    padding: 40px 0;
-    border-top: 4px solid var(--gold);
+    background: var(--bg);
+    color: var(--gold);
+    padding: 20px 0;   /* تقليل ارتفاع الفوتر */
+    border-top: 3px solid var(--gold);
 }
 
 .footer-container {
@@ -453,7 +233,7 @@ iframe.skiptranslate {
     margin: auto;
     display: flex;
     justify-content: space-between;
-    gap: 40px;
+    gap: 20px;
 }
 
 .footer-section {
@@ -461,7 +241,6 @@ iframe.skiptranslate {
     text-align: left;
 }
 
-/* 👇 التعديل الأهم */
 .footer-section.social {
     display: flex;
     flex-direction: column;
@@ -470,8 +249,8 @@ iframe.skiptranslate {
 
 .footer-section h3,
 .footer-section h4 {
-    margin-bottom: 15px;
-    font-size: 20px;
+    margin-bottom: 10px;
+    font-size: 18px;
     font-weight: bold;
 }
 
@@ -479,7 +258,7 @@ iframe.skiptranslate {
     color: var(--gold);
     text-decoration: none;
     display: block;
-    margin: 5px 0;
+    margin: 4px 0;
     transition: .3s;
 }
 
@@ -489,9 +268,8 @@ iframe.skiptranslate {
 
 .footer-icons {
     display: flex;
-    gap: 15px;
-    margin-top: 10px;
-    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 5px;
 }
 
 .footer-icons svg {
@@ -506,5 +284,6 @@ iframe.skiptranslate {
 .footer-end {
     text-align: center;
     color: white;
-    margin-top: 30px;
+    margin-top: 15px;
+    font-size: 14px;
 }

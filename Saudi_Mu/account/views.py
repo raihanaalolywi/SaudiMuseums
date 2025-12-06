@@ -12,12 +12,20 @@ from museum.models import Booking, Bookmark
 # -----------------------------
 # Sign Up
 # -----------------------------
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django.contrib.auth import login
+from django.contrib import messages
+from django.db import transaction, IntegrityError
+from .models import Profile
+
 def sign_up(request):
     if request.method == "POST":
         try:
             account_type = request.POST.get("account_type")
 
             with transaction.atomic():
+                # إنشاء مستخدم جديد
                 new_user = User.objects.create_user(
                     username=request.POST["username"],
                     password=request.POST["password"],
@@ -26,42 +34,46 @@ def sign_up(request):
                     last_name=request.POST["last_name"]
                 )
 
+                # حساب عادي
                 if account_type == "user":
                     Profile.objects.create(
                         user=new_user, 
                         avatar=request.FILES.get("avatar")
                     )
-                    redirect_url = "account:user_profile_view"
-                    redirect_args = {"user_name": new_user.username}
-                    success_msg = f"Welcome {new_user.first_name}! Your account has been created successfully."
+                    login(request, new_user)
+                    messages.success(request, f"Welcome {new_user.first_name}! Your account has been created successfully.")
+                    return redirect("account:user_profile_view", user_name=new_user.username)
 
+                # حساب هيئة
                 elif account_type == "authority":
-                    authority = Authority.objects.create(
-                        owner=new_user,
-                        name=f"New Authority ({new_user.username})",
-                        image=request.FILES.get("avatar")
+                    # ننشئ فقط Profile للمستخدم
+                    Profile.objects.create(
+                        user=new_user, 
+                        avatar=request.FILES.get("avatar")
                     )
-                    redirect_url = "account:authority_profile"
-                    redirect_args = {"authority_id": authority.id}
-                    success_msg = f"Authority account created successfully! Welcome aboard."
+                    login(request, new_user)
+                    messages.success(request, "Account created! Please add your Authority details first.")
+                    # إعادة التوجيه مباشرة إلى صفحة إضافة الهيئة
+                    return redirect("add_authority")
 
                 else:
                     messages.error(request, "Please select a valid account type.")
                     return redirect("account:sign_up")
 
-            login(request, new_user)
-            messages.success(request, success_msg)
-            return redirect(redirect_url, **redirect_args)
-
         except IntegrityError:
             messages.error(request, "Username already exists. Please choose another username.")
             return redirect("account:sign_up")
+
         except Exception as e:
-            messages.error(request, "Couldn't create account. Please try again.")
-            print(f"Sign up error: {e}")
+            import traceback
+            traceback.print_exc()  # يطبع كامل الخطأ في الكونسول
+            messages.error(request, f"Couldn't create account. Error: {str(e)}")
             return redirect("account:sign_up")
 
+    # GET request → عرض صفحة التسجيل
     return render(request, "account/signup.html")
+
+
 
 
 # -----------------------------
@@ -174,7 +186,6 @@ def update_authority_profile(request, authority_id):
             print(f"Update authority error: {e}")
 
     return render(request, "account/update_authority_profile.html", {"authority": authority})
-
 
 # -----------------------------
 # Update User Profile
