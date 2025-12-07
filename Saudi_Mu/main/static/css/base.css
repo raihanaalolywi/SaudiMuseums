@@ -12,20 +12,23 @@ body {
 /* ================= NAVBAR ================= */
 .base-navbar {
     background: var(--bg) !important;
-    padding: 9px 15px;  /* نحذف padding الرأسي */
+    padding: 9px 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 3px solid var(--gold);
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    position: sticky;
-    top: 0;
-    z-index: 999;
-    direction: ltr;
 
-    height: 60px;       /* ارتفاع ثابت للهيدر */
-    min-height: 50px;   /* حتى لو اختفى عنصر */
+    position: fixed;  
+    top: 0;
+    left: 0;
+    width: 100%;      /* يغطي كامل عرض الصفحة */
+    z-index: 9999;    /* أعلى من أي عنصر آخر */
+    
+    height: 60px;
+    min-height: 50px;
 }
+
 /* Sections */
 .base-left {
     order: 1;
@@ -283,7 +286,86 @@ body {
 
 .footer-end {
     text-align: center;
-    color: white;
+    color: rgb(90, 90, 90);
     margin-top: 15px;
     font-size: 14px;
+}
+
+
+/* الهامبرغر مخفي على الشاشات الكبيرة */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+}
+
+.hamburger span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #5e192a;
+    border-radius: 2px;
+}
+
+/* شريط الروابط على الموبايل */
+#navLinks {
+    display: flex;
+    gap: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hamburger {
+        display: flex;
+    }
+
+    #navLinks {
+        display: none; /* مخفي افتراضياً على الموبايل */
+        flex-direction: column;
+        background: #fff;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        padding: 10px 0;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    #navLinks a {
+        padding: 10px 20px;
+        color: #5e192a;
+        text-decoration: none;
+    }
+
+    #navLinks a:hover {
+        background-color: #f0f0f0;
+    }
+}
+
+
+/* كل الرسائل بما فيها logout */
+.messages-fixed-top .alert {
+    position: fixed;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1050;
+    width: 90%;          /* تمتد أفقيًا */
+    max-width: 600px;    /* على الكمبيوتر */
+    padding: 10px 20px;
+    font-size: 14px;
+    text-align: center;
+    border-radius: 6px;
+    white-space: normal;  /* تكسر النص الطويل بدل ما يكبر */
+    word-wrap: break-word; /* لكسر النص الطويل */
+}
+
+/* الجوال */
+@media (max-width: 480px) {
+    .messages-fixed-top .alert {
+        width: 95%;
+        font-size: 13px;
+        padding: 8px 12px;
+    }
 }

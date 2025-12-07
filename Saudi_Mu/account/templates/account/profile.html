@@ -1,120 +1,118 @@
 {% extends 'main/base.html' %}
 {% load static %}
-
 {% block title %}{{ user.username }} - Profile{% endblock %}
-
 {% block content %}
 
 <style>
-    /* Base Colors: #7d1845 (Maroon) | #4a0e2e (Dark Maroon) | #f5f0e6 (Light Beige) */
-    
-    body {
-        background-color: #f9f8f6 ;
-        font-family: 'Arial', sans-serif;
-    }
+/* Base Colors */
+body {
+    background-color: #f9f8f6 ;
+    font-family: 'Arial', sans-serif;
+}
 
-    /* Main Profile Container - WIDER */
-    .profile-container {
-        max-width: 1050px;
-        margin: 60px auto;
-        padding: 0 15px;
-    }
+/* Main Profile Container */
+.profile-container {
+    max-width: 1050px;
+    margin: 60px auto;
+    padding: 0 15px;
+}
 
-    /* General Card Styling */
-    .profile-card, .stats-card-section {
-        background-color: #ffffff;
-        border-radius: 1.5rem;
-        box-shadow: 0 15px 45px rgba(0,0,0,0.18);
-        padding: 50px; /* Increased internal padding */
-    }
+/* Card Styling */
+.profile-card, .stats-card-section {
+    background-color: #ffffff;
+    border-radius: 1.5rem;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.18);
+    padding: 50px;
+}
 
-    /* Profile Image Styling */
-    .profile-img-lg {
-        width: 170px;
-        height: 170px;
-        object-fit: cover;
-        border-radius: 50%;
-        border: 3px solid #5e192a;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
+/* Profile Image Styling */
+.profile-img-lg {
+    width: 170px;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #5e192a;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
 
-    /* Button Styling */
-    .btn-maroon {
-        background-color: #5e192a;
-        color: #fff;
-        font-weight: 600;
-        transition: background-color 0.3s;
-    }
+/* Button Styling */
+.btn-maroon {
+    background-color: #5e192a;
+    color: #fff;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+.btn-maroon:hover {
+    background-color: rgb(124, 34, 35);
+    border-color: #a02a32;
+    color: #fff;
+}
 
-    .btn-maroon:hover {
-        background-color: rgb(124, 34, 35);
-        border-color: #a02a32;
-        color: #fff;
-    }
+/* Text & Headings */
+.text-dark-maroon {
+    color: #5e192a;
+}
+.text-maroon {
+    color: #5e192a;
+}
+.section-title {
+    font-weight: bold;
+    color: #5e192a;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 8px;
+    margin-bottom: 25px;
+}
 
-    /* Text & Headings */
-    .text-dark-maroon {
-        color: #5e192a;
-    }
+/* Stats Cards */
+.stats-card {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    padding: 20px;
+    transition: transform 0.3s;
+    border-bottom: 4px solid #5e192a;
+}
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+.stats-card h3 {
+    color: #5e192a;
+    font-weight: 700;
+    font-size: 2.5rem;
+}
+.stats-card p {
+    margin-bottom: 0;
+    color: #5e192a;
+    font-weight: 500;
+}
 
-    .text-maroon {
-        color: #5e192a;
-    }
+/* Museum Item Card */
+.museum-item-card {
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+    transition: box-shadow 0.3s;
+}
+.museum-item-card:hover {
+    box-shadow: 0 4px 12px rgba(125, 24, 69, 0.2);
+}
 
-    .section-title {
-        font-weight: bold;
-        color: #5e192a;
-        border-bottom: 2px solid #eee;
-        padding-bottom: 8px;
-        margin-bottom: 25px;
-    }
-
-    /* Stats Cards */
-    .stats-card {
-        background-color: #ffffff;
-        border-radius: 1rem;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        padding: 20px;
-        transition: transform 0.3s;
-        border-bottom: 4px solid #5e192a;
-    }
-    .stats-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    }
-    .stats-card h3 {
-        color: #5e192a;
-        font-weight: 700;
-        font-size: 2.5rem;
-    }
-    .stats-card p {
-        margin-bottom: 0;
-        color: #5e192a;
-        font-weight: 500;
-    }
-
-    /* Museum Item Card (Bookmarks/Visited) */
-    .museum-item-card {
-        border-radius: 1rem;
-        overflow: hidden;
-        border: 1px solid #e0e0e0;
-        transition: box-shadow 0.3s;
-    }
-    .museum-item-card:hover {
-        box-shadow: 0 4px 12px rgba(125, 24, 69, 0.2);
-    }
+/* Star Rating */
+.star-rating i {
+    color: #f1c40f;
+}
 </style>
 
 <div class="profile-container">
 
+    <!-- Profile Card -->
     <div class="profile-card mb-5">
         <div class="row align-items-center">
-            
             <div class="col-md-3 text-center pb-4 pb-md-0 border-md-end">
                 <img src="{% if profile.avatar %}{{ profile.avatar.url }}{% else %}{% static 'images/avatar.jpg' %}{% endif %}" 
                      alt="User Avatar" 
                      class="profile-img-lg mb-3">
-                
                 <h3 class="text-dark-maroon fw-bold mb-1">{{ user.first_name }} {{ user.last_name }}</h3>
                 <p class="text-muted">{{ user.username }}</p>
 
@@ -126,11 +124,9 @@
             </div>
 
             <div class="col-md-9 ps-md-5">
-                
                 <h4 class="section-title">
                     <i class="fas fa-user me-2"></i> About Me
                 </h4>
-
                 <p class="text-secondary mb-4">
                     {% if profile.about %}
                         {{ profile.about }}
@@ -148,6 +144,7 @@
         </div>
     </div>
 
+    <!-- Stats -->
     <div class="row g-4 mb-5 text-center">
         <div class="col-md-4">
             <div class="stats-card">
@@ -169,6 +166,7 @@
         </div>
     </div>
 
+    <!-- Bookmarked Museums -->
     <div class="stats-card-section mb-5 p-4">
         <h4 class="section-title"><i class="fas fa-bookmark me-2"></i> Bookmarked Museums</h4>
         {% if bookmarks %}
@@ -176,10 +174,7 @@
                 {% for b in bookmarks %}
                 <div class="col">
                     <div class="card h-100 museum-item-card">
-                        <img src="{{ b.museum.image.url }}" 
-                              class="card-img-top" 
-                              alt="{{ b.museum.name }}" 
-                              style="height:180px; object-fit:cover;">
+                        <img src="{{ b.museum.image.url }}" class="card-img-top" alt="{{ b.museum.name }}" style="height:180px; object-fit:cover;">
                         <div class="card-body">
                             <h5 class="card-title text-dark-maroon">{{ b.museum.name }}</h5>
                             <p class="text-muted mb-1 small"><strong class="text-maroon">Authority:</strong> {{ b.museum.authority.name }}</p>
@@ -190,12 +185,13 @@
                 {% endfor %}
             </div>
         {% else %}
-            <div class="alert alert-info text-center mt-3" role="alert">
+            <div class="alert alert-info text-center mt-3">
                 <i class="fas fa-info-circle me-2"></i> You haven't bookmarked any museums yet.
             </div>
         {% endif %}
     </div>
 
+    <!-- Visited Museums -->
     <div class="stats-card-section mb-5 p-4">
         <h4 class="section-title"><i class="fas fa-route me-2"></i>Visited Museums</h4>
         {% if visited_museums %}
@@ -203,10 +199,7 @@
                 {% for b in visited_museums %}
                 <div class="col">
                     <div class="card h-100 museum-item-card">
-                        <img src="{{ b.museum.image.url }}" 
-                              class="card-img-top" 
-                              alt="{{ b.museum.name }}" 
-                              style="height:180px; object-fit:cover;">
+                        <img src="{{ b.museum.image.url }}" class="card-img-top" alt="{{ b.museum.name }}" style="height:180px; object-fit:cover;">
                         <div class="card-body">
                             <h5 class="card-title text-dark-maroon">{{ b.museum.name }}</h5>
                             <p class="text-muted mb-1 small"><strong class="text-maroon">Authority:</strong> {{ b.museum.authority.name }}</p>
@@ -218,30 +211,42 @@
                 {% endfor %}
             </div>
         {% else %}
-            <div class="alert alert-info text-center mt-3" role="alert">
+            <div class="alert alert-info text-center mt-3">
                 <i class="fas fa-info-circle me-2"></i> No visited museums recorded yet.
             </div>
         {% endif %}
     </div>
 
+    <!-- Comments -->
     <div class="stats-card-section p-4">
         <h4 class="section-title"><i class="fas fa-comments me-2"></i>Comments</h4>
         {% if user_comments %}
             <ul class="list-group list-group-flush">
-                {% for comment in user_comments|slice:":5" %} 
-                <li class="list-group-item d-flex justify-content-between align-items-start p-3 museum-item-card mb-2 border">
-                    <div>
-                        <p class="mb-1">{{ comment.text }}</p>
-                        <small class="text-muted d-block">Commented on: <a href="#" class="text-maroon">{{ comment.museum.name }}</a></small>
+                {% for comment in user_comments|slice:":5" %}
+                <li class="list-group-item mb-2 p-3 museum-item-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-dark-maroon mb-1">{{ comment.museum.name }}</h6>
+                            <div class="star-rating mb-2">
+                                {% for i in "12345"|make_list %}
+                                    {% if forloop.counter <= comment.rating %}
+                                        <i class="fas fa-star"></i>
+                                    {% else %}
+                                        <i class="far fa-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <p class="mb-1">{{ comment.comment }}</p>
+                        </div>
+                        <small class="text-secondary ms-3 text-end" style="min-width: 120px;">
+                            {{ comment.created_at|date:"Y-m-d H:i" }}
+                        </small>
                     </div>
-                    <small class="text-secondary ms-4 text-end" style="min-width: 120px;">
-                        {{ comment.created_at|date:"Y-m-d H:i" }}
-                    </small>
                 </li>
                 {% endfor %}
             </ul>
         {% else %}
-            <div class="alert alert-info text-center mt-3" role="alert">
+            <div class="alert alert-info text-center mt-3">
                 <i class="fas fa-info-circle me-2"></i> You haven't posted any comments yet.
             </div>
         {% endif %}

@@ -7,19 +7,7 @@ from .models import Authority, AuthorityType, Museum
 from .forms import AuthorityForm, MuseumForm
 from .models import Authority, Museum, MuseumComment  # اضفت تعديل هنا 
 from django.core.paginator import Paginator # اضفت برضو هنا سطر اضافي  لعملية  pagination
- 
-
-
-from django.db.models import Q
-
-from museum.models import  Museum
 from museum.models import Bookmark
-
-
-
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib import messages
 from .models import Museum, Booking
 
 @login_required(login_url='account:sign_in')
@@ -53,13 +41,20 @@ def add_authority(request):
 
 
 # عرض جميع الهيئات
+
 def all_authority(request):
     authority_type = request.GET.get("type")
 
     if authority_type:
-        authorities = Authority.objects.filter(type_id=authority_type)
+          authorities_list = Authority.objects.filter(type_id=authority_type).order_by("id")
     else:
-        authorities = Authority.objects.all().order_by("-id")
+         authorities_list = Authority.objects.all().order_by("id")
+
+
+    # Pagination: 3 هيئات لكل صفحة
+    paginator = Paginator(authorities_list, 3)
+    page_number = request.GET.get('page')
+    authorities = paginator.get_page(page_number)
 
     types = AuthorityType.objects.all()
 
@@ -67,8 +62,8 @@ def all_authority(request):
         "authorities": authorities,
         "types": types,
         "selected": authority_type,
+        "paginator": paginator,  # لإظهار أزرار الصفحات
     })
-
 
 
 
@@ -268,40 +263,15 @@ def update_museum(request, museum_id):
 def search(request):
     query = request.GET.get('q', '').strip()
 
-    if not query:
-        return render(request, 'museum/search.html', {"no_results": True, "query": query})
+    authorities = Authority.objects.filter(name__icontains=query) if query else Authority.objects.none()
+    museums = Museum.objects.filter(name__icontains=query) if query else Museum.objects.none()
 
-    # البحث عن الهيئة
-    authorities = Authority.objects.filter(name__icontains=query)
-    museums = Museum.objects.filter(name__icontains=query)
+    context = {
+        'authorities': authorities,
+        'museums': museums,
+    }
+    return render(request, 'museum/search_results.html', context)
 
-    # إذا وجدنا هيئة واحدة فقط، نعيد صفحة التفاصيل مباشرة
-    if authorities.count() == 1 and museums.count() == 0:
-        authority = authorities.first()
-        museums_of_authority = Museum.objects.filter(authority=authority)
-        return render(request, 'museum/details.html', {
-            "authority": authority,
-            "museums": museums_of_authority
-        })
-
-    # إذا وجدنا متحف واحد فقط
-    if museums.count() == 1 and authorities.count() == 0:
-        museum = museums.first()
-        authority = museum.authority
-        museums_of_authority = Museum.objects.filter(authority=authority)
-        return render(request, 'museum/details.html', {
-            "authority": authority,
-            "museums": museums_of_authority
-        })
-
-    # إذا كانت النتائج متعددة أو لا توجد نتيجة
-    no_results = not authorities.exists() and not museums.exists()
-    return render(request, 'museum/search.html', {
-        "authorities": authorities,
-        "museums": museums,
-        "no_results": no_results,
-        "query": query
-    })
 
 
 
@@ -347,6 +317,9 @@ def booking(request):
         'museums': museums,
     }
     return render(request, 'museum/booking.html', context)
+
+
+
 
 
 

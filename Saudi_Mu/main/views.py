@@ -5,10 +5,8 @@ from museum.models import Museum
 
 
 def home_view(request):
-    # آخر هيئتين
     authorities = Authority.objects.all().order_by('-id')[:3]
 
-    # آخر 6 متاحف
     museums = Museum.objects.all().order_by('-id')[:3]
 
     return render(request, 'main/home.html', {

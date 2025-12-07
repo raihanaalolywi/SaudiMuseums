@@ -8,12 +8,12 @@ body {
 /* البطاقة */
 .booking-card {
     max-width: 800px;
-    margin: 150px auto 4rem auto; /* بدل -80px خلي 150px لفصل عن الفيديو */
+    margin: 150px auto 4rem auto; 
     background: white;
     border-radius: 25px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.1);
     overflow: hidden;
-    position: relative; /* تأكد انه موجود */
+    position: relative; 
     z-index: 1;
 }
 

@@ -2,18 +2,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Saudi Museum{% endblock %}</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Saudi Museum{% endblock %}</title>
 
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'css/messages.css' %}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-    
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/messages.css' %}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+<!-- Google Translate -->
+<script type="text/javascript">
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+        pageLanguage: 'en', 
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+    }, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </head>
 <body>
+
+<!-- Google Translate container -->
+<div id="google_translate_element" style="display:none;"></div>
 
 <!-- NAVBAR -->
 <nav class="base-navbar">
@@ -21,32 +35,26 @@
         <span class="base-logo">Saudi Museum</span>
     </div>
 
-    <div class="base-center">
-        <a class="base-link" href="{% url 'home' %}">Home</a>
-{% if user.is_authenticated and user.authorityprofile %}
+    <!-- Hamburger -->
+    <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
 
-<!-- رابط إضافة هيئة يظهر فقط للمستخدمين المسجلين كهيئة -->
-{% if user.is_authenticated and user.authority_set.exists %}
-    <a href="{% url 'add_authority' %}">Add Authority</a>
-{% endif %}
-
-{% endif %}
-{% if user.is_authenticated and user.authority_set.exists %}
-    <a href="{% url 'add_museum' user.authority_set.first.id %}" class="btn-add-museum">
-       Add Museum
-    </a>
-{% endif %}
-
-
-        <a href="{% url 'all_authority' %}">All Authority </a>
-
-        <a class="base-link" href="{% url 'booking' %}">Booking</a>
-
-        <a class="base-link" href="{% url 'contact_us' %}">Contact Us</a>
+    <!-- Links -->
+    <div class="base-center" id="navLinks">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'all_authority' %}">All Authority</a>
+        <a href="{% url 'booking' %}">Booking</a>
+        <a href="{% url 'contact_us' %}">Contact Us</a>
+        {% if user.is_authenticated and user.authority_set.exists %}
+            <a href="{% url 'add_museum' user.authority_set.first.id %}">Add Museum</a>
+            <a href="{% url 'add_authority' %}">Add Authority</a>
+        {% endif %}
     </div>
 
     <div class="base-right">
-
         <!-- LANGUAGE DROPDOWN -->
         <div class="dropdown">
             <button class="icon-btn" id="languageBtn">🌐</button>
@@ -56,75 +64,44 @@
             </div>
         </div>
 
-     {% if user.is_authenticated %}
-    
-    {% with authority=user.authority_set.first %}
-        {% if authority %}
-            <!-- حساب هيئة -->
-            <a class="profile-link" href="{% url 'account:authority_profile' authority_id=authority.id %}">
-                {% if authority.image %}
-                    <img src="{{ authority.image.url }}" class="nav-avatar" alt="Logo">
+        {% if user.is_authenticated %}
+            {% with authority=user.authority_set.first %}
+                {% if authority %}
+                    <a class="profile-link" href="{% url 'account:authority_profile' authority_id=authority.id %}">
+                        {% if authority.image %}
+                            <img src="{{ authority.image.url }}" class="nav-avatar" alt="Logo">
+                        {% else %}
+                            <img src="{% static 'image/default_authority.png' %}" class="nav-avatar" alt="Default Logo">
+                        {% endif %}
+                        <span class="nav-username">{{ authority.name }}</span>
+                    </a>
                 {% else %}
-                    <img src="{% static 'image/default_authority.png' %}" class="nav-avatar" alt="Default Logo">
+                    <a class="profile-link" href="{% url 'account:user_profile_view' user_name=user.username %}">
+                        {% if user.profile.avatar %}
+                            <img src="{{ user.profile.avatar.url }}" class="nav-avatar" alt="Avatar">
+                        {% else %}
+                            <img src="{% static 'image/default_user.png' %}" class="nav-avatar" alt="Default Avatar">
+                        {% endif %}
+                        <span class="nav-username">{{ user.username }}</span>
+                    </a>
                 {% endif %}
-                <span class="nav-username">{{ authority.name }}</span>
+            {% endwith %}
+            <a class="icon-btn" href="{% url 'account:log_out' %}">
+                <span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">logout</span>
             </a>
-        
         {% else %}
-            <!-- حساب مستخدم عادي -->
-            <a class="profile-link" href="{% url 'account:user_profile_view' user_name=user.username %}">
-                {% if user.profile.avatar %}
-                    <img src="{{ user.profile.avatar.url }}" class="nav-avatar" alt="Avatar">
-                {% else %}
-                    <img src="{% static 'image/default_user.png' %}" class="nav-avatar" alt="Default Avatar">
-                {% endif %}
-                <span class="nav-username">{{ user.username }}</span>
-            </a>
+            <a class="icon-btn" href="{% url 'account:sign_in' %}">Sign In</a>
+            <a class="icon-btn" href="{% url 'account:sign_up' %}">Sign Up</a>
         {% endif %}
-    {% endwith %}
-
-  <!-- LOGOUT -->
-<!-- LOGOUT -->
-<a class="icon-btn" href="{% url 'account:log_out' %}">
-    <span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">
-        logout
-    </span>
-</a>
-
-
-{% else %}
-    <!-- SIGN IN -->
-    <a class="icon-btn" href="{% url 'account:sign_in' %}">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round"
-        stroke-linejoin="round">
-            <circle cx="12" cy="8" r="4"></circle>
-            <path d="M2 12h14"></path>
-            <path d="M8 8l-6 4 6 4"></path>
-        </svg>
-    </a>
-    
-    <!-- SIGN UP -->
-    <a class="icon-btn" href="{% url 'account:sign_up' %}">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round"
-        stroke-linejoin="round">
-            <circle cx="12" cy="7" r="4"></circle>
-            <path d="M12 14c-5 0-8 2.5-8 5v2"></path>
-            <path d="M19 12v6"></path>
-            <path d="M16 15h6"></path>
-        </svg>
-    </a>
-{% endif %}
     </div>
 </nav>
 
-<!-- MESSAGES (fixed under navbar) -->
-<div class="messages-fixed-top" style="position: fixed; top: 70px; left: 50%; transform: translateX(-50%); z-index: 1050; width: 90%; max-width: 800px;">
+<!-- MESSAGES -->
+<div class="messages-fixed-top">
     {% if messages %}
         {% for message in messages %}
             <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} 
-    alert-dismissible fade show mb-2 text-center" role="alert">
+            alert-dismissible fade show mb-2 text-center" role="alert">
                 {{ message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -132,88 +109,19 @@
     {% endif %}
 </div>
 
-
-<!-- MAIN CONTENT -->
 <main>
     {% block content %}{% endblock %}
 </main>
 
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- GOOGLE TRANSLATE -->
-<div id="google_translate_element" style="display:none;"></div>
-
-<script type="text/javascript">
-function googleTranslateElementInit() {
-    new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
-}
-
-// إخفاء شريط Google Translate بشكل كامل وغير مزعج
-window.addEventListener('load', function() {
-    var translateBar = document.querySelector('.goog-te-banner-frame');
-    if (translateBar) {
-        translateBar.style.transform = 'scale(0.1)';
-        translateBar.style.transformOrigin = 'top left';
-        translateBar.style.opacity = '0';
-        translateBar.style.pointerEvents = 'none';
-    }
-});
-
-// Dropdown logic
-const dropdown = document.querySelector('.dropdown');
-const btn = document.getElementById('languageBtn');
-
-btn.addEventListener('click', () => {
-    dropdown.classList.toggle('show');
-});
-
-document.addEventListener('click', function(event) {
-    if (!dropdown.contains(event.target)) {
-        dropdown.classList.remove('show');
-    }
-});
-
-// تغيير اللغة عند الضغط على زر
-function doTranslate(lang) {
-    document.cookie = "googtrans=/en/" + lang + ";path=/";
-    location.reload();
-}
-</script>
-
-<!-- تحميل سكربت Google Translate -->
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
+<!-- FOOTER -->
 <footer class="footer">
-
     <div class="footer-container">
-
-        <!-- لاحظي فقط أضفت social هنا -->
         <div class="footer-section social">
             <h4>Social Media</h4>
-
             <div class="footer-icons">
-
-                <a href="{% url 'contact_us' %}">
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <rect x="3" y="5" width="18" height="14" rx="2"></rect>
-                        <polyline points="3 7 12 13 21 7"></polyline>
-                    </svg>
-                </a>
-
-                <a href="#">
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M23 3c-1 .5-2 .7-3 1a4.5 4.5 0 0 0-7.7 4A12.8 12.8 0 0 1 3 4s-4 9 5 13c-3 .9-5 .8-7 1 9 5 20 0 20-11"></path>
-                    </svg>
-                </a>
-
-                <a href="#">
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <rect x="2" y="2" width="20" height="20" rx="5"></rect>
-                        <path d="M16 11.37A4 4 0 1112.63 8"></path>
-                    </svg>
-                </a>
-
+                <a href="{% url 'contact_us' %}"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="14" rx="2"></rect><polyline points="3 7 12 13 21 7"></polyline></svg></a>
+                <a href="#"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M23 3c-1 .5-2 .7-3 1a4.5 4.5 0 0 0-7.7 4A12.8 12.8 0 0 1 3 4s-4 9 5 13c-3 .9-5 .8-7 1 9 5 20 0 20-11"></path></svg></a>
+                <a href="#"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="2" width="20" height="20" rx="5"></rect><path d="M16 11.37A4 4 0 1112.63 8"></path></svg></a>
             </div>
         </div>
 
@@ -228,12 +136,41 @@ function doTranslate(lang) {
             <h3>Saudi Museum</h3>
             <p>A platform for discovering the best museums and institutions in Saudi Arabia</p>
         </div>
-
     </div>
 
-    <p class="footer-end">جميع الحقوق محفوظة 2025 © Saudi Museum</p>
+    <p class=" footer-end "> 2025 © Saudi Museum </p>
 
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Hamburger toggle
+    const hamburger = document.getElementById("hamburger");
+    const navLinks = document.getElementById("navLinks");
+    hamburger.addEventListener("click", () => {
+        navLinks.style.display = navLinks.style.display === "flex" ? "none" : "flex";
+    });
+    window.addEventListener("resize", () => {
+        navLinks.style.display = window.innerWidth > 768 ? "flex" : "none";
+    });
+
+    // Dropdown
+    const dropdown = document.querySelector('.dropdown');
+    const btn = document.getElementById('languageBtn');
+    btn.addEventListener('click', () => {
+        dropdown.classList.toggle('show');
+    });
+    document.addEventListener('click', function(event) {
+        if (!dropdown.contains(event.target) && event.target !== btn) {
+            dropdown.classList.remove('show');
+        }
+    });
+
+    // Google Translate function
+    function doTranslate(lang) {
+        document.cookie = "googtrans=/en/" + lang + ";path=/";
+        location.reload();
+    }
+</script>
 </body>
 </html>

@@ -1,0 +1,113 @@
+{% extends "main/base.html" %}
+{% block content %}
+
+<div class="search-results-container">
+
+    {% if authorities %}
+    <h3>Authorities</h3>
+    <div class="authorities-grid">
+        {% for a in authorities %}
+        <div class="authority-card">
+            {% if a.image %}
+            <img src="{{ a.image.url }}" alt="{{ a.name }}">
+            {% endif %}
+            <h4>{{ a.name }}</h4>
+            <a href="{% url 'details' a.id %}" class="btn-card">View Details</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if museums %}
+    <h3>Museums</h3>
+    <div class="museums-grid">
+        {% for m in museums %}
+        <div class="museum-card">
+            {% if m.image %}
+            <img src="{{ m.image.url }}" alt="{{ m.name }}">
+            {% endif %}
+            <h4>{{ m.name }}</h4>
+            <p>{{ m.authority.name }}</p>
+            <a href="{% url 'museum_details' m.id %}" class="btn-card">View Details</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+</div>
+
+<style>
+/* Containers */
+.search-results-container {
+    padding: 20px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Titles */
+h3 {
+    color: #4A0E2E;
+    margin-top: 20px;
+}
+
+/* Grid Layout */
+.authorities-grid, .museums-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+/* Card Styles */
+.authority-card, .museum-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    padding: 10px;
+    width: 200px;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.authority-card:hover, .museum-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* Images */
+.authority-card img, .museum-card img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Text */
+.authority-card h4, .museum-card h4 {
+    margin: 10px 0 5px;
+    color: #7d1845;
+}
+
+.museum-card p {
+    margin: 0 0 10px;
+    color: #4A0E2E;
+    font-size: 0.9rem;
+}
+
+/* Buttons */
+.btn-card {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #5e192a;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: background 0.3s;
+}
+
+.btn-card:hover {
+    background: #7d1845;
+}
+</style>
+
+{% endblock %}

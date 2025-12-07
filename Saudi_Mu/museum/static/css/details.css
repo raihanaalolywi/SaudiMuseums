@@ -11,7 +11,7 @@
 .page-title {
     font-size: 32px;
     font-weight: 900;
-    color: var(--bg);
+    color: #5e192a;
     margin-bottom: 25px;
     text-align: left;
 }
@@ -47,7 +47,7 @@
 .detail-type {
     font-size: 16px;
     font-weight: bold;
-    color: black;
+    color: #5e192a;
 }
 
 .detail-name {
@@ -84,7 +84,7 @@
     font-size: 26px;
     font-weight: 800;
     margin-bottom: 20px;
-    color: var(--bg);
+    color: #5e192a;
     text-align: left;
 }
 
@@ -132,7 +132,7 @@
 .museum-name {
     font-size: 20px;
     font-weight: 700;
-    color: var(--bg);
+    color:#5e192a;
     margin: 5px 0;
 }
 
@@ -211,7 +211,7 @@
     font-size: 26px;
     font-weight: 800;
     margin-bottom: 18px;
-    color: var(--bg);
+    color: #5e192a;
 }
 
 /* ترتيب الحقول جنب بعض */
@@ -225,7 +225,7 @@
 /* عناصر النموذج */
 .add-comment-box label {
     font-weight: 600;
-    color: var(--bg);
+    color: #5e192a;
     margin-right: 5px;
     font-size: 15px;
 }
@@ -277,7 +277,7 @@
 .comments-title {
     font-size: 22px;
     font-weight: 800;
-    color: var(--bg);
+    color: #5e192a;
     margin-bottom: 20px;
 }
 
@@ -310,14 +310,14 @@
 
 .comment-rating {
     font-size: 15px;
-    color: var(--gold);
+    color: #b78832;
     font-weight: bold;
 }
 
 .comment-museum {
     font-size: 13px;
     font-weight: 600;
-    color: var(--bg);
+    color: #5e192a;
 }
 
 .comment-text {

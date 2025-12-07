@@ -7,17 +7,13 @@ from django.db import transaction, IntegrityError
 from .models import Profile
 from museum.models import Authority, Museum
 from museum.models import Bookmark
-from museum.models import Booking, Bookmark
+from museum.models import Booking
+from django.shortcuts import render
+from museum.models import MuseumComment
 
 # -----------------------------
 # Sign Up
 # -----------------------------
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from django.contrib.auth import login
-from django.contrib import messages
-from django.db import transaction, IntegrityError
-from .models import Profile
 
 def sign_up(request):
     if request.method == "POST":
@@ -117,6 +113,7 @@ def log_out(request: HttpRequest):
 # -----------------------------
 # User Profile View
 # -----------------------------
+
 def user_profile_view(request: HttpRequest, user_name):
     try:
         user = User.objects.get(username=user_name)
@@ -124,13 +121,12 @@ def user_profile_view(request: HttpRequest, user_name):
     except User.DoesNotExist:
         messages.error(request, "User not found.")
         return redirect("home")
-    
+    # التعليقات
+    user_comments = MuseumComment.objects.filter(user=user).order_by('-created_at')
+    # المفضلة
     bookmarks = Bookmark.objects.filter(user=user).select_related('museum')
-
-    # كل الـ bookings (زيارات المتاحف)
+    # الزيارات
     bookings = Booking.objects.filter(user=user).select_related('museum', 'museum__authority').order_by('-booked_at')
-
-
     context = {
         "user": user,
         "profile": profile,
@@ -138,9 +134,9 @@ def user_profile_view(request: HttpRequest, user_name):
         "bookmarks_count": bookmarks.count(),
         "visited_museums": bookings,
         "visited_museums_count": bookings.count(),
+        "user_comments": user_comments,   # ← مهم جداً
     }
     return render(request, 'account/profile.html', context)
-
 
 # -----------------------------
 # Authority Profile View

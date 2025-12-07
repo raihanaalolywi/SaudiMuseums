@@ -48,8 +48,6 @@ class Museum(models.Model):
 
     def __str__(self):
         return self.name
-    
-
 
     # اضفت المودل لاضافة تعليق هنا 
 

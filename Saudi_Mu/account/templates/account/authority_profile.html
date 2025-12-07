@@ -6,93 +6,86 @@
 {% block content %}
 
 <style>
-    /* Base Colors: #7d1845 (Maroon) | #4a0e2e (Dark Maroon) | #f5f0e6 (Light Beige) */
-    
-    body {
-        background-color: #f9f8f6 ;
-        font-family: 'Arial', sans-serif;
-    }
+body {
+    background-color: #f9f8f6;
+    font-family: 'Arial', sans-serif;
+}
 
-    /* Main Profile Card Styling - WIDER CONTAINER */
-    .profile-container {
-        max-width: 1050px; /* Increased width */
-        margin: 60px auto; /* Increased margin */
-        padding: 0 15px; /* Added padding for smaller screens */
-    }
+.profile-container {
+    max-width: 1050px;
+    margin: 60px auto;
+    padding: 0 15px;
+}
 
-    .profile-card {
-        background-color: #ffffff;
-        border-radius: 1.5rem;
-        box-shadow: 0 15px 45px rgba(0,0,0,0.18); /* Stronger shadow */
-        padding: 50px; /* Increased internal padding */
-    }
+.profile-card {
+    background-color: #ffffff;
+    border-radius: 1.5rem;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.18);
+    padding: 50px;
+}
 
-    /* Profile Image Styling */
-    .profile-img-lg {
-        width: 170px; /* Slightly larger image */
-        height: 170px;
-        object-fit: cover;
-        border-radius: 50%;
-        border: 3px solid #5c1932;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
+.profile-img-lg {
+    width: 170px;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #5c1932;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
 
-    /* Button Styling */
-    .btn-maroon {
-        background-color: #5e192a;
-        color: #fff;
-        font-weight: 600;
-        transition: background-color 0.3s, border-color 0.3s;
-    }
+.btn-maroon {
+    background-color: #5e192a;
+    color: #fff;
+    font-weight: 600;
+    transition: background-color 0.3s, border-color 0.3s;
+}
 
-    .btn-maroon:hover {
-        background-color: #6b3d3d;
-        color: #fff;
-    }
-    
-    .btn-outline-maroon {
-        color: #5e192a;
-        border-color: #6b3d3d;
-    }
+.btn-maroon:hover {
+    background-color: #6b3d3d;
+    color: #fff;
+}
 
-    .btn-outline-maroon:hover {
-        background-color: #e6f5ed;
-        border-color: #5e192a;
-        color: #6b3d3d;
-    }
+.btn-outline-maroon {
+    color: #5e192a;
+    border-color: #6b3d3d;
+}
 
-    /* Text & Headings */
-    .text-dark-maroon {
-        color: #4a0e2e;
-    }
+.btn-outline-maroon:hover {
+    background-color: #e6f5ed;
+    border-color: #5e192a;
+    color: #6b3d3d;
+}
 
-    .section-title {
-        border-bottom: 2px solid #eee;
-        padding-bottom: 8px; /* Slightly more space */
-        margin-bottom: 25px; /* Slightly more space */
-    }
+.text-dark-maroon {
+    color: #4a0e2e;
+}
 
-    /* Stats/Museums Card - Larger Padding */
-    .stats-card {
-        background-color: #ffffff;
-        border-radius: 1rem;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        padding: 35px; /* Increased internal padding */
-        margin-top: 40px; /* Increased margin */
-        border-left: 5px solid #5e192a;
-    }
-    
-    .list-group-item-museum {
-        border-radius: 0.5rem;
-        margin-bottom: 10px;
-        border: 1px solid #e0e0e0;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
+.section-title {
+    border-bottom: 2px solid #eee;
+    padding-bottom: 8px;
+    margin-bottom: 25px;
+}
 
-    .list-group-item-museum:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 3px 10px rgba(125, 24, 69, 0.15); /* Slightly stronger hover shadow */
-    }
+.stats-card {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    padding: 35px;
+    margin-top: 40px;
+    border-left: 5px solid #5e192a;
+}
+
+.list-group-item-museum {
+    border-radius: 0.5rem;
+    margin-bottom: 10px;
+    border: 1px solid #e0e0e0;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.list-group-item-museum:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(125, 24, 69, 0.15);
+}
 </style>
 
 <div class="profile-container">
@@ -127,9 +120,8 @@
 
                 <div class="row mb-4 g-3">
                     <div class="col-sm-6">
-                            {% if authority.location %}{{ authority.location }}{% else %}N/A{% endif %}</p>
+                        {% if authority.location %}{{ authority.location }}{% else %}N/A{% endif %}
                     </div>
-
                 </div>
 
                 <h5 class="mt-4 mb-3 text-dark-maroon">About</h5>

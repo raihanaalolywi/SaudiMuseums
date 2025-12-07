@@ -616,6 +616,17 @@ body {
     }
 }
 </style>
+<!-- MESSAGES -->
+<div class="messages-fixed-top container position-fixed top-0 start-50 translate-middle-x pt-3" style="z-index: 1050;">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show text-center" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
 
 <section class="hero">
     <div class="hero-overlay"></div>
